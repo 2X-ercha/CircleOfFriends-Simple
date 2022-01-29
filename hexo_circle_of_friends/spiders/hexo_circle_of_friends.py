@@ -38,8 +38,6 @@ class FriendpageLinkSpider(scrapy.Spider):
         # 将获取到的朋友列表传递到管道
         while not self.friend_list.empty():
             friend = self.friend_list.get()
-            print(friend)
-            print(type(friend))
             friend_info = {
                 "name": friend["name"],
                 "link": friend["link"],

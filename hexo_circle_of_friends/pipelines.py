@@ -77,7 +77,7 @@ class HexoCircleOfFriendsPipeline:
     def outdate_clean(self,time_limit):
         out_date_post = 0
         for query_i in self.query_post_list:
-            time = query_i.get('time')
+            time = query_i.get('created')
             query_time = datetime.datetime.strptime(time, "%Y-%m-%d")
             if (datetime.datetime.today() - query_time).days > time_limit:
                 delete = self.Friendspoor.create_without_data(query_i.get('objectId'))
@@ -87,6 +87,8 @@ class HexoCircleOfFriendsPipeline:
     # 友链数据上传
     def friendlist_push(self):
         for item in enumerate(self.friend_info):
+            print(item)
+            '''
             friendlist = self.Friendslist()
             friendlist.set('name', item["name"])
             friendlist.set('link', item["link"])
@@ -99,6 +101,7 @@ class HexoCircleOfFriendsPipeline:
                 print("请求失败，请检查链接： %s" % item[1])
                 friendlist.set('error', "true")
             friendlist.save()
+            '''
             self.total_friend_num+=1
 
     # 文章数据上传
