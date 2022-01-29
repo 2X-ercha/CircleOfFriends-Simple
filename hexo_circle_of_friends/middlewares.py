@@ -20,6 +20,10 @@ class RandomUserAgentMiddleware:
             request.headers.setdefault('User-Agent',UA)
         return None
 
+class ProxyMiddleware(object):
+    def process_request(self, request, spider):
+        return None
+
 class HexoCircleOfFriendsSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
