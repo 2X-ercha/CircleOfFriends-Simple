@@ -96,17 +96,13 @@ class HexoCircleOfFriendsPipeline:
             friendlist = self.Friendslist()
             friendlist.set('name', item["name"])
             friendlist.set('link', item["link"])
-            try:
-                friendlist.set('avatar', item["avatar"])
-            except:
-                print(item)
-                friendlist.set('avatar', "???")
+            friendlist.set('avatar', item["avatar"])
             friendlist.set('descr', item["descr"])
             if item['name'] in self.nonerror_data:
                 friendlist.set('error', "false")
             else:
                 self.err_friend_num += 1
-                print("请求失败，请检查链接： %s" % item["link"])
+                print("请求失败，请检查链接： %s" % item["link"]+item["feed"])
                 friendlist.set('error', "true")
             friendlist.save()
             self.total_friend_num+=1
