@@ -41,6 +41,7 @@ class HexoCircleOfFriendsPipeline:
                     delete = self.Friendspoor.create_without_data(query_item.get('objectId'))
                     delete.destroy()
             self.friendpoor_push(item)
+        return item
 
     def close_spider(self,spider):
         self.friendlist_push()

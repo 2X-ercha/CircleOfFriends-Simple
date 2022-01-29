@@ -20,26 +20,6 @@ class RandomUserAgentMiddleware:
             request.headers.setdefault('User-Agent',UA)
         return None
 
-class BlockSiteMiddleware:
-    def process_request(self, request, spider):
-        # print(request.url)
-        if "theme" in request.meta:
-            return None
-        for url in settings.BLOCK_SITE:
-            if re.match(url,request.url):
-                # print("block----------------->%s"%url)
-                raise IgnoreRequest("url block")
-        # print("now is %s"%request.url)
-        return None
-
-class ProxyMiddleware(object):
-    def process_request(self, request, spider):
-        if settings.DEBUG and settings.HTTP_PROXY_URL != "":
-            request.meta['proxy'] = settings.HTTP_PROXY_URL
-        elif settings.HTTP_PROXY and len(sys.argv)>=5:
-            request.meta['proxy'] = sys.argv[4]
-        return None
-
 class HexoCircleOfFriendsSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the

@@ -33,7 +33,7 @@ class FriendpageLinkSpider(scrapy.Spider):
             friend = self.friend_poor.get()
             self.friend_list.put(friend)
             friend["link"] += "/" if not friend["link"].endswith("/") else ""
-            # yield Request(friend["link"] + friend["feed"], callback=rule_mate[friend["rule"]], meta={"friend": friend}, dont_filter=True, errback=self.errback_handler)
+            yield Request(friend["link"] + friend["feed"], callback=rule_mate[friend["rule"]], meta={"friend": friend}, dont_filter=True, errback=self.errback_handler)
             
         # 将获取到的朋友列表传递到管道
         while not self.friend_list.empty():
