@@ -25,7 +25,6 @@ class FriendpageLinkSpider(scrapy.Spider):
         with open("config/link.yml",  "r", encoding="utf-8") as f:
             friends = yaml.load(f.read())
         for friend in friends:
-            yield friend
             self.friend_poor.put(friend)
         
         # 请求atom / rss
@@ -36,10 +35,6 @@ class FriendpageLinkSpider(scrapy.Spider):
             friend["link"] += "/" if not friend["link"].endswith("/") else ""
             yield Request(friend["link"] + friend["feed"], callback=rule_mate[friend["rule"]], meta={"friend": friend}, dont_filter=True, errback=self.errback_handler)
             
-        # 将获取到的朋友列表传递到管道
-        while not self.friend_list.empty():
-            friend_info = self.friend_list.get()
-
 
     def post_atom_parse(self, response):
         # print("post_atom_parse---------->" + response.url)

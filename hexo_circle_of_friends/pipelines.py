@@ -5,18 +5,27 @@ import datetime
 import settings
 import sys
 import re
+import yaml
 from scrapy.exceptions import DropItem
 
 
 class HexoCircleOfFriendsPipeline:
     def __init__(self):
-        self.friend_info = [] # 需最后上传
+        self.friend_info = []
 
         self.nonerror_data = set() # 未失联友链link集合
 
         self.total_post_num = 0
         self.total_friend_num = 0
         self.err_friend_num = 0
+
+        # 友链去重
+        self.friend_set = set()
+        with open("config/link.yml",  "r", encoding="utf-8") as f:
+            self.friends = yaml.load(f.read())
+        for friend in self.friends:
+            if friend["link"] not in self.friend_set:
+                self.friend_info.append[friend]
     
     def open_spider(self, spider):
         leancloud.init(sys.argv[1], sys.argv[2])
@@ -30,18 +39,14 @@ class HexoCircleOfFriendsPipeline:
             delete.destroy()
 
     def process_item(self, item, spider):
-        if "descr" in item.keys():
-            self.friend_info.append(item)
-            print(item)
-        elif "title" in item.keys():
-            self.nonerror_data.add(item["name"])
-            # rss创建时间保留
-            for query_item in self.query_post_list:
-                if query_item.get("link") == item["link"]:
-                    item["created"] = min(item['created'], query_item.get('created'))
-                    delete = self.Friendspoor.create_without_data(query_item.get('objectId'))
-                    delete.destroy()
-            self.friendpoor_push(item)
+        self.nonerror_data.add(item["name"])
+        # rss创建时间保留
+        for query_item in self.query_post_list:
+            if query_item.get("link") == item["link"]:
+                item["created"] = min(item['created'], query_item.get('created'))
+                delete = self.Friendspoor.create_without_data(query_item.get('objectId'))
+                delete.destroy()
+        self.friendpoor_push(item)
         return item
 
     def close_spider(self, spider):
@@ -88,8 +93,6 @@ class HexoCircleOfFriendsPipeline:
     # 友链数据上传
     def friendlist_push(self):
         for item in self.friend_info:
-            print(item)
-            '''
             friendlist = self.Friendslist()
             friendlist.set('name', item["name"])
             friendlist.set('link', item["link"])
@@ -102,7 +105,6 @@ class HexoCircleOfFriendsPipeline:
                 print("请求失败，请检查链接： %s" % item[1])
                 friendlist.set('error', "true")
             friendlist.save()
-            '''
             self.total_friend_num+=1
 
     # 文章数据上传
@@ -124,32 +126,22 @@ class HexoCircleOfFriendsPipeline:
 class DuplicatesPipeline:
     def __init__(self):
         self.poor_set = set() # posts filter set 用于对文章数据的去重
-        self.friend_set = set() # userdata filter set 用于对朋友列表的去重
     
     def process_item(self, item, spider):
         # 上传前本地审核
-        if "descr" in item.keys(): # 本地友链重复审查
-            #  userdata filter
-            link = item["link"]
-            if link in self.friend_set:
-                raise DropItem("Duplicate found:%s" % link)
-            else:
-                self.friend_set.add(link)
-                return item
-        elif "title" in item.keys(): # 本地文章重复审查
-            link = item["link"]
-            if link in self.poor_set or link=="":
-                # 重复数据清洗
-                raise DropItem("Duplicate found:%s" % link)
-            elif not link.startswith("http"):
-                # 链接必须是http开头，不能是相对地址
-                raise DropItem("invalid link")
-            elif not re.match("^\d+",item["created"]):
-                # 时间不是xxxx-xx-xx格式，丢弃
-                raise DropItem("invalid time")
-            elif not re.match("^\d+",item["updated"]):
-                # 时间不是xxxx-xx-xx格式，丢弃
-                raise DropItem("invalid time")
-            else:
-                self.poor_set.add(link)
-                return item
+        link = item["link"]
+        if link in self.poor_set or link=="":
+            # 重复数据清洗
+            raise DropItem("Duplicate found:%s" % link)
+        elif not link.startswith("http"):
+            # 链接必须是http开头，不能是相对地址
+            raise DropItem("invalid link")
+        elif not re.match("^\d+",item["created"]):
+            # 时间不是xxxx-xx-xx格式，丢弃
+            raise DropItem("invalid time")
+        elif not re.match("^\d+",item["updated"]):
+            # 时间不是xxxx-xx-xx格式，丢弃
+            raise DropItem("invalid time")
+        else:
+            self.poor_set.add(link)
+            return item
