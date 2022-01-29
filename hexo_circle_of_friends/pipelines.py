@@ -109,7 +109,7 @@ class HexoCircleOfFriendsPipeline:
         friendpoor.set('updated', item['updated'])
         friendpoor.set('link', item['link'])
         friendpoor.set('author', item['name'])
-        friendpoor.set('avatar', item['img'])
+        friendpoor.set('avatar', item['avatar'])
         friendpoor.set('rule', item['rule'])
         friendpoor.save()
         print("----------------------")
