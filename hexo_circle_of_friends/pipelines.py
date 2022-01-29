@@ -105,7 +105,7 @@ class HexoCircleOfFriendsPipeline:
     def friendpoor_push(self,item):
         friendpoor = self.Friendspoor()
         friendpoor.set('title', item['title'])
-        friendpoor.set('created', item['time'])
+        friendpoor.set('created', item['created'])
         friendpoor.set('updated', item['updated'])
         friendpoor.set('link', item['link'])
         friendpoor.set('author', item['name'])
