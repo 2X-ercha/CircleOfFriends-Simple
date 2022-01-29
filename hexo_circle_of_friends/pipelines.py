@@ -44,6 +44,7 @@ class HexoCircleOfFriendsPipeline:
         return item
 
     def close_spider(self,spider):
+        print("333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333")
         self.friendlist_push()
         self.outdate_clean(settings.OUTDATE_CLEAN)
         print("----------------------")

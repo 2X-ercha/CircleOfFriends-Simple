@@ -37,14 +37,7 @@ class FriendpageLinkSpider(scrapy.Spider):
             
         # 将获取到的朋友列表传递到管道
         while not self.friend_list.empty():
-            friend = self.friend_list.get()
-            friend_info = {
-                "name": friend["name"],
-                "link": friend["link"],
-                "avatar": friend["avatar"],
-                "descr": friend["descr"]
-            }
-            yield friend_info
+            yield self.friend_list.get()
 
     def post_atom_parse(self, response):
         # print("post_atom_parse---------->" + response.url)
