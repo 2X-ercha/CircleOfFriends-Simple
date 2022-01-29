@@ -20,6 +20,10 @@ class RandomUserAgentMiddleware:
             request.headers.setdefault('User-Agent',UA)
         return None
 
+class BlockSiteMiddleware:
+    def process_request(self, request, spider):
+        return None
+
 class ProxyMiddleware(object):
     def process_request(self, request, spider):
         return None
