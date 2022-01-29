@@ -1,12 +1,9 @@
 # -*- coding:utf-8 -*-
 
-from fastapi import FastAPI, Form
+from fastapi import FastAPI
 import uvicorn
 import leancloud
 import os
-import requests
-import oss2
-import json
 
 from leancloud import user
 
