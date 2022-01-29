@@ -90,7 +90,7 @@
 - name: Tianli's blog
   link: https://tianli-blog.club/
   feed: atom.xml
-  avayar: https://img1.tianli0.top/logo.png
+  avatar: https://img1.tianli0.top/logo.png
   rule: atom
   descr: 惟其不可能，所以才相信。
 

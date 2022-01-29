@@ -106,7 +106,7 @@ class HexoCircleOfFriendsPipeline:
                 friendlist.set('error', "false")
             else:
                 self.err_friend_num += 1
-                print("请求失败，请检查链接： %s" % item[1])
+                print("请求失败，请检查链接： %s" % item["link"])
                 friendlist.set('error', "true")
             friendlist.save()
             self.total_friend_num+=1
