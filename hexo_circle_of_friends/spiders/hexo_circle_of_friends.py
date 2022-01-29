@@ -35,7 +35,6 @@ class FriendpageLinkSpider(scrapy.Spider):
             friend["link"] += "/" if not friend["link"].endswith("/") else ""
             yield Request(friend["link"] + friend["feed"], callback=rule_mate[friend["rule"]], meta={"friend": friend}, dont_filter=True, errback=self.errback_handler)
             
-
     def post_atom_parse(self, response):
         # print("post_atom_parse---------->" + response.url)
         friend = response.meta.get("friend")
