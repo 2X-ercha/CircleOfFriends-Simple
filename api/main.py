@@ -95,10 +95,6 @@ async def friend():
         friend_list_json.append(itemlist)
 
     return friend_list_json
-    
-    
-    
-    return api_json
 
 
 if __name__ == "__main__":
