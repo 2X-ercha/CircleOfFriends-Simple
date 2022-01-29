@@ -3,7 +3,7 @@
 import time
 import scrapy
 import queue
-from scrapy.http.request import Request
+from scrapy import Request
 from hexo_circle_of_friends.utils.regulations import *
 import yaml
 
@@ -33,7 +33,7 @@ class FriendpageLinkSpider(scrapy.Spider):
             friend = self.friend_poor.get()
             self.friend_list.put(friend)
             friend["link"] += "/" if not friend["link"].endswith("/") else ""
-            return Request(friend["link"] + friend["feed"], callback=rule_mate[friend["rule"]], meta={"friend": friend}, dont_filter=True, errback=self.errback_handler)
+            yield Request(friend["link"] + friend["feed"], callback=rule_mate[friend["rule"]], meta={"friend": friend}, dont_filter=True, errback=self.errback_handler)
             
         # 将获取到的朋友列表传递到管道
         while not self.friend_list.empty():
