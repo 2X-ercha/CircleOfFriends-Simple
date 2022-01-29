@@ -87,7 +87,7 @@ class HexoCircleOfFriendsPipeline:
 
     # 友链数据上传
     def friendlist_push(self):
-        for item in enumerate(self.friend_info):
+        for item in self.friend_info:
             print(item)
             '''
             friendlist = self.Friendslist()
