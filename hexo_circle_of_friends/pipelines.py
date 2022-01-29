@@ -114,7 +114,7 @@ class HexoCircleOfFriendsPipeline:
         friendpoor.save()
         print("----------------------")
         print(item["name"])
-        print("《{}》\n文章发布时间：{}\t\t采取的爬虫规则为：{}".format(item["title"], item["time"], item["rule"]))
+        print("《{}》\n文章发布时间：{}\t\t采取的爬虫规则为：{}".format(item["title"], item["updated"], item["rule"]))
         self.total_post_num +=1
 
 class DuplicatesPipeline:
