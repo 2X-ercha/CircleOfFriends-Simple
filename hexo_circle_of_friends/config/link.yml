@@ -138,9 +138,9 @@
 
 - name: TNXG's Blog
   link: https://tnxg.loyunet.cn/
-  feed: rss.xml
+  feed: atom.xml
   avatar: https://tnxg.loyunet.cn/assets/images/favicon.png
-  rule: rss
+  rule: atom
   descr: 一只没钱买server的fw的博客
 
 - name: 多米诺的blog
@@ -149,3 +149,31 @@
   avatar: https://bu.dusays.com/2021/12/21/4f20cbfa55e12.png
   rule: atom
   descr: Vlogger · TRPG云玩家 · 养了只猫 · 想去旅拍
+
+- name: LanYunのBlog
+  link: https://lanyundev.vercel.app/
+  feed: atom.xml
+  avatar: https://lanyundev.vercel.app/img/logo2.jpg
+  rule: atom
+  descr: Share Technology.
+
+- name: iYuan's Blog
+  link: https://o0.work/
+  feed: atom.xml
+  avatar: https://npm.elemecdn.com/iyuancdn@latest/img/avatar.jpg
+  rule: atom
+  descr: 不患人之不己知，患不知人也
+
+- name: 葱苓的小窝
+  link: https://www.itciraos.cn/
+  feed: atom.xml
+  avatar: https://www.itciraos.cn/mysource/avatar.webp
+  rule: atom
+  descr: Dare & Do
+
+- name: Hajeekn's Blog
+  link: https://blog.slqwq.cn/
+  feed: atom.xml
+  avatar: https://npm.elemecdn.com/perorepe-cdn@1.0.0/v1/static-files/avatar.webp
+  rule: atom
+  descr: 梦中做梦,做了个白日梦
