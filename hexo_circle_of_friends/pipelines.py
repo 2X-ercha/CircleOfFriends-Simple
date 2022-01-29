@@ -50,7 +50,6 @@ class HexoCircleOfFriendsPipeline:
         return item
 
     def close_spider(self, spider):
-        print("11111111111111111111111111111111111111111111111111111111111111")
         self.friendlist_push()
         self.outdate_clean(settings.OUTDATE_CLEAN)
         print("----------------------")
@@ -99,7 +98,7 @@ class HexoCircleOfFriendsPipeline:
             friendlist.set('link', item["link"])
             friendlist.set('avatar', item["avatar"])
             friendlist.set('descr', item["descr"])
-            if item[0] in self.nonerror_data:
+            if item['name'] in self.nonerror_data:
                 friendlist.set('error', "false")
             else:
                 self.err_friend_num += 1
