@@ -25,7 +25,7 @@ class HexoCircleOfFriendsPipeline:
             self.friends = yaml.load(f.read())
         for friend in self.friends:
             if friend["link"] not in self.friend_set:
-                self.friend_info.append[friend]
+                self.friend_info.append(friend)
     
     def open_spider(self, spider):
         leancloud.init(sys.argv[1], sys.argv[2])
