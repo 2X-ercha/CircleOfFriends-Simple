@@ -36,8 +36,10 @@ class FriendpageLinkSpider(scrapy.Spider):
             yield Request(friend["link"] + friend["feed"], callback=rule_mate[friend["rule"]], meta={"friend": friend}, dont_filter=True, errback=self.errback_handler)
             
         # 将获取到的朋友列表传递到管道
+        '''
         while not self.friend_list.empty():
             yield self.friend_list.get()
+        '''
 
     def post_atom_parse(self, response):
         # print("post_atom_parse---------->" + response.url)
