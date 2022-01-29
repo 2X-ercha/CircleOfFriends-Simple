@@ -32,6 +32,7 @@ class HexoCircleOfFriendsPipeline:
     def process_item(self, item, spider):
         if "descr" in item.keys():
             self.friend_info.append(item)
+            print(item)
         elif "title" in item.keys():
             self.nonerror_data.add(item["name"])
             # rss创建时间保留
@@ -43,8 +44,7 @@ class HexoCircleOfFriendsPipeline:
             self.friendpoor_push(item)
         return item
 
-    def close_spider(self,spider):
-        print("333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333")
+    def close_spider(self, spider):
         self.friendlist_push()
         self.outdate_clean(settings.OUTDATE_CLEAN)
         print("----------------------")
