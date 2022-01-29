@@ -26,6 +26,7 @@ class FriendpageLinkSpider(scrapy.Spider):
             friends = yaml.load(f.read())
         for friend in friends:
             self.friend_poor.put(friend)
+            print(friend)
         
         # 请求atom / rss
         rule_mate = {"atom": self.post_atom_parse, "rss": self.post_rss_parse}
