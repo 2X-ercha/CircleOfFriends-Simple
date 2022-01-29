@@ -1,0 +1,10 @@
+{
+    "version": 2,
+    "public": false,
+    "builds": [{ "src": "app.py", "use": "@now/python" }],
+    "routes": [
+        { "src": "/api", "dest": "app.py" },
+        { "src": "/friend", "dest": "app.py" },
+        { "src": "/docs", "dest": "app.py" }
+    ]
+}
