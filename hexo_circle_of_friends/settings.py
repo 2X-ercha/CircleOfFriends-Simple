@@ -55,8 +55,11 @@ ITEM_PIPELINES = {
    'hexo_circle_of_friends.pipelines.DuplicatesPipeline': 200,
 }
 
+DEBUG = False
+
 # proxy
 # HTTP_PROXY_URL = "192.168.1.106:10809"
+HTTP_PROXY = False
 HTTP_PROXY_URL = ""
 
 ################################以上禁止修改################################
