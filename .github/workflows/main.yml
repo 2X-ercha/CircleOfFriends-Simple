@@ -1,0 +1,35 @@
+name: update-friends-posts
+
+on: 
+  push:
+    branches: 
+     - master
+  schedule:
+    - cron: "0 0,6,12,18,21 * * *"
+  watch:
+    types: [started]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id  # 自己点的 start
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Set up Python #安装python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install requirements 
+      working-directory: ./hexo_circle_of_friends
+      run: |
+        pip install -r requirement.txt
+    - name: Update posts #更新
+      env:
+        $APP_ID: ${{ secrets.APPID }} 
+        $APP_KEY: ${{ secrets.APPKEY }}
+        $LINK: ${{ secrets.LINK }}
+        $PROXY: ${{ secrets.PROXY }} 
+      working-directory: ./hexo_circle_of_friends
+      run: | 
+        python run.py ${{ secrets.APPID }} ${{ secrets.APPKEY }} ${{ secrets.LINK }} ${{ secrets.PROXY }} 
