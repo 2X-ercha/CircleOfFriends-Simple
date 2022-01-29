@@ -140,7 +140,10 @@ class DuplicatesPipeline:
             elif not link.startswith("http"):
                 # 链接必须是http开头，不能是相对地址
                 raise DropItem("invalid link")
-            elif not re.match("^\d+",item["time"]):
+            elif not re.match("^\d+",item["created"]):
+                # 时间不是xxxx-xx-xx格式，丢弃
+                raise DropItem("invalid time")
+            elif not re.match("^\d+",item["updated"]):
                 # 时间不是xxxx-xx-xx格式，丢弃
                 raise DropItem("invalid time")
             else:
