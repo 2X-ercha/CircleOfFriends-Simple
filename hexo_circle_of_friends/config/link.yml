@@ -111,7 +111,7 @@
 - name: Gahotx
   link: https://gahotx.cn/
   feed: atom.xml
-  avatar: https://npm.elemecdn.com/gahotx-cdn@1.0.13/photo/cat.jpg
+  avatar: https://pub.gahotx.cn/photo/cat.jpg
   rule: atom
   descr: Don'trepeatyourself
 
@@ -164,12 +164,12 @@
   rule: atom
   descr: 不患人之不己知，患不知人也
 
-- name: 葱苓的小窝
-  link: https://www.itciraos.cn/
+- name: 星空下的YZY
+  link: https://226yzy.com/
   feed: atom.xml
-  avatar: https://www.itciraos.cn/mysource/avatar.webp
+  avatar: https://s4.ax1x.com/2021/12/11/oTDujJ.jpg
   rule: atom
-  descr: Dare & Do
+  descr: 记录一枚菜鸟的征程
 
 - name: Hajeekn's Blog
   link: https://blog.slqwq.cn/
@@ -177,3 +177,10 @@
   avatar: https://npm.elemecdn.com/perorepe-cdn@1.0.0/v1/static-files/avatar.webp
   rule: atom
   descr: 梦中做梦,做了个白日梦
+
+- name: Rootlex's Blog
+  link: https://blog.nalex.top/
+  feed: feed/atom
+  avatar: https://bu.dusays.com/2022/01/24/445fb4d1af3e6.jpg
+  rule: atom
+  descr: 寒蝉黎明之时，便是重生之日 !
