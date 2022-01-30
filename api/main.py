@@ -25,11 +25,10 @@ app.add_middleware(
 )
 
 def initleancloud():
-    # leancloud.init(os.environ["LEANCLOUD_ID"], os.environ["LEANCLOUD_KEY"])
-    leancloud.init("L1XyQ3J4YBI3EeT0yipKT3Bp-MdYXbMMI", "oF8IWsza21H2pQlgtgqLB2Qo")
+    leancloud.init(os.environ["LEANCLOUD_ID"], os.environ["LEANCLOUD_KEY"])
 
 @app.get("/api")
-async def all(start: int = 0, end: int = -1, rule: str = "created"):
+async def all(start: int = 0, end: int = -1, rule: str = "updated"):
     list = ['title','created','updated','link','author','avatar']
     # Verify key
     initleancloud()
@@ -67,12 +66,13 @@ async def all(start: int = 0, end: int = -1, rule: str = "created"):
         'last_updated_time': last_updated_time
     }
     
+    article_data_init = []
     article_data = []
     for item in query_list:
         itemlist = {}
         for elem in list:
             itemlist[elem] = item.get(elem)
-        article_data.append(itemlist)
+        article_data_init.append(itemlist)
     
     if end == -1: end = min(article_num, 1000)
     if start < 0 or start >= min(article_num, 1000):
@@ -81,7 +81,13 @@ async def all(start: int = 0, end: int = -1, rule: str = "created"):
         return {"message": "end error"}
     if rule != "created" and rule != "updated":
         return {"message": "rule error, please use 'created'/'updated'"}
-    article_data.sort(key=lambda x : x[rule], reverse=True)
+    article_data_init.sort(key=lambda x : x[rule], reverse=True)
+    index = 1
+    for item in article_data_init:
+        item["floor"] = index
+        index += 1
+        article_data.append(item)
+
     api_json['article_data'] = article_data[start:end]
     return api_json
 
