@@ -211,8 +211,7 @@ async def post(link: str = None, num: int = -1, rule: str = "updated"):
         "article_num": article_num
     }
     
-    if num == -1 or num > min(article_num, 1000): num = min(article_num, 1000)
-    if num <= 0: return {"message": "num error"}
+    if num < 0 or num > min(article_num, 1000): num = min(article_num, 1000)
     article_data_init.sort(key=lambda x : x[rule], reverse=True)
     index = 1
     for item in article_data_init:
