@@ -192,11 +192,15 @@ async def post(link: str = None, num: int = -1, rule: str = "updated"):
     article_num  = None
     api_json = {}
     
+    if link.startswith('http'):
+        links = link.split('/')[2]
+    else:
+        links = link
     article_data_init = []
     article_data = []
     for item in query_list:
         itemlist = {}
-        if item.get('link').startswith(link):
+        if links in item.get('link'):
             if author == None: author = item.get('author')
             if avatar == None: avatar = item.get('avatar')
             for elem in list:
