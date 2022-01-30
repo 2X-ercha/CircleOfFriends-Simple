@@ -166,7 +166,7 @@ async def randompost(rule: str = "updated"):
     return random.choice(article_data)
 
 @app.get("/post")
-async def post(link: str, num: int = -1, rule: str = "updated"):
+async def post(link: str = None, num: int = -1, rule: str = "updated"):
     list = ['title','link','created','updated']
     # Verify key
     initleancloud()
@@ -176,11 +176,17 @@ async def post(link: str, num: int = -1, rule: str = "updated"):
     query = Friendspoor.query
     query.descending('created')
     query.limit(1000)
-
-    # Choose class
     query.select('title','created','updated','link','author','avatar','createdAt')
     query_list = query.find()
+
+    Friendlist = leancloud.Object.extend('friend_list')
+    query_userinfo = Friendlist.query
+    query_userinfo.limit(1000)
+    query_userinfo.select('name','link','avatar','descr')
+    query_list_user = query_userinfo.find()
     
+    if link == None:
+        link = random.choice(query_list_user).get('link')
     author = None
     avatar = None
     article_num  = None
