@@ -7,6 +7,8 @@
         { "src": "/friend", "dest": "main.py" },
         { "src": "/randomfriend", "dest": "main.py" },
         { "src": "/randompost", "dest": "main.py" },
-        { "src": "/docs", "dest": "main.py" }
+        { "src": "/post", "dest": "main.py" },
+        { "src": "/docs", "dest": "main.py" },
+        { "src": "/openapi.json", "dest": "main.py" }
     ]
 }

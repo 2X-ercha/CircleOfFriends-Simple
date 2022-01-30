@@ -1,14 +1,11 @@
 # -*- coding:utf-8 -*-
 
-import http
 from fastapi import FastAPI
-from sqlalchemy import null
 import uvicorn
 import leancloud
 import os
 import random
 
-from leancloud import user
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -184,9 +181,9 @@ async def post(link: str, num: int = -1, rule: str = "updated"):
     query.select('title','created','updated','link','author','avatar','createdAt')
     query_list = query.find()
     
-    author = null
-    avatar = null
-    article_num  = null
+    author = None
+    avatar = None
+    article_num  = None
     api_json = {}
     
     article_data_init = []
@@ -194,8 +191,8 @@ async def post(link: str, num: int = -1, rule: str = "updated"):
     for item in query_list:
         itemlist = {}
         if item.get('link').startswith(link):
-            if author == null: author = item.get('author')
-            if avatar == null: avatar = item.get('avatar')
+            if author == None: author = item.get('author')
+            if avatar == None: avatar = item.get('avatar')
             for elem in list:
                 itemlist[elem] = item.get(elem)
             article_data_init.append(itemlist)
