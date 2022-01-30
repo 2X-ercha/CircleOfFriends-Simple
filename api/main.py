@@ -4,6 +4,7 @@ from fastapi import FastAPI
 import uvicorn
 import leancloud
 import os
+import random
 
 from leancloud import user
 from fastapi.middleware.cors import CORSMiddleware
@@ -112,6 +113,58 @@ async def friend():
         friend_list_json.append(itemlist)
 
     return friend_list_json
+
+@app.get("/randomfriend")
+async def randomfriend():
+    list = ['name', 'link', 'avatar', 'descr']
+    # Verify key
+    initleancloud()
+
+    Friendlist = leancloud.Object.extend('friend_list')
+    query_userinfo = Friendlist.query
+    query_userinfo.limit(1000)
+    query_userinfo.select('name','link','avatar','descr')
+    query_list_user = query_userinfo.find()
+
+    # Result to arr
+    friend_list_json = []
+    for item in query_list_user:
+        itemlist = {}
+        for elem in list:
+            itemlist[elem] = item.get(elem)
+        friend_list_json.append(itemlist)
+
+    return random.choice(friend_list_json)
+
+@app.get("/randompost")
+async def randompost(rule: str = "updated"):
+    list = ['title','created','updated','link','author','avatar']
+    # Verify key
+    initleancloud()
+
+    # Declare class
+    Friendspoor = leancloud.Object.extend('friend_poor')
+    query = Friendspoor.query
+    query.descending('created')
+    query.limit(1000)
+    query_list = query.find()
+
+    article_data_init = []
+    article_data = []
+    for item in query_list:
+        itemlist = {}
+        for elem in list:
+            itemlist[elem] = item.get(elem)
+        article_data_init.append(itemlist)
+    
+    article_data_init.sort(key=lambda x : x[rule], reverse=True)
+    index = 1
+    for item in article_data_init:
+        item["floor"] = index
+        index += 1
+        article_data.append(item)
+    
+    return random.choice(article_data)
 
 
 if __name__ == "__main__":
