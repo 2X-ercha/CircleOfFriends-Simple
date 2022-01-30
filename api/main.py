@@ -29,6 +29,14 @@ def initleancloud():
 
 @app.get("/api")
 async def all(start: int = 0, end: int = -1, rule: str = "updated"):
+    '''返回数据库统计信息和文章信息列表
+
+    :param start: 【可选】文章信息列表从 按rule排序后的顺序 的开始位置，默认为0，超出范围返回{"message": "start error"}
+
+    :param end: 【可选】文章信息列表从 按rule排序后的顺序 的结束位置，默认为-1（即最大），其它非正数返回{"message": "end error"}
+    
+    :param rule: 【可选】文章排序规则（创建时间/更新时间），默认为updated，参数错误返回{"message": "rule error, please use 'created'/'updated'"}
+    '''
     list = ['title','created','updated','link','author','avatar']
     # Verify key
     initleancloud()
@@ -93,6 +101,8 @@ async def all(start: int = 0, end: int = -1, rule: str = "updated"):
 
 @app.get("/friend")
 async def friend():
+    '''返回数据库友链列表（无额外参数）
+    '''
     list = ['name', 'link', 'avatar', 'descr']
     # Verify key
     initleancloud()
@@ -115,6 +125,8 @@ async def friend():
 
 @app.get("/randomfriend")
 async def randomfriend():
+    '''随机返回一个友链信息（无额外参数）
+    '''
     list = ['name', 'link', 'avatar', 'descr']
     # Verify key
     initleancloud()
@@ -137,6 +149,8 @@ async def randomfriend():
 
 @app.get("/randompost")
 async def randompost(rule: str = "updated"):
+    '''随机返回一篇文章信息（无额外参数）
+    '''
     list = ['title','created','updated','link','author','avatar']
     # Verify key
     initleancloud()
@@ -167,6 +181,14 @@ async def randompost(rule: str = "updated"):
 
 @app.get("/post")
 async def post(link: str = None, num: int = -1, rule: str = "updated"):
+    '''返回指定链接的数据库内文章信息列表
+
+    :param link: 【可选】链接地址，例如 https://noionion.top/ 或 noionion.top，默认为None（即随机返回一个链接的文章信息列表）
+
+    :param num: 【可选】指定链接的文章信息列表 按rule排序后的顺序 的前num篇，默认为-1（即最大）
+
+    :param rule: 【可选】文章排序规则（创建时间/更新时间），默认为updated，参数错误返回{"message": "rule error, please use 'created'/'updated'"}
+    '''
     list = ['title','link','created','updated']
     # Verify key
     initleancloud()
@@ -216,6 +238,8 @@ async def post(link: str = None, num: int = -1, rule: str = "updated"):
     }
     
     if num < 0 or num > min(article_num, 1000): num = min(article_num, 1000)
+    if rule != "created" and rule != "updated":
+        return {"message": "rule error, please use 'created'/'updated'"}
     article_data_init.sort(key=lambda x : x[rule], reverse=True)
     index = 1
     for item in article_data_init:
