@@ -118,7 +118,7 @@
 - name: FanHeart
   link: https://hesifan.top/
   feed: atom.xml
-  avatar: htpps://hesifan.top/medias/avatar.jpg
+  avatar: https://hesifan.top/medias/avatar.jpg
   rule: atom
   descr: 念念不忘 必有回响
 

@@ -1,6 +1,8 @@
 # -*- coding:utf-8 -*-
 
+import http
 from fastapi import FastAPI
+from sqlalchemy import null
 import uvicorn
 import leancloud
 import os
@@ -75,10 +77,10 @@ async def all(start: int = 0, end: int = -1, rule: str = "updated"):
             itemlist[elem] = item.get(elem)
         article_data_init.append(itemlist)
     
-    if end == -1: end = min(article_num, 1000)
+    if end == -1 or end > min(article_num, 1000): end = min(article_num, 1000)
     if start < 0 or start >= min(article_num, 1000):
         return {"message": "start error"}
-    if end <= 0 or end > min(article_num, 1000):
+    if end <= 0:
         return {"message": "end error"}
     if rule != "created" and rule != "updated":
         return {"message": "rule error, please use 'created'/'updated'"}
@@ -166,6 +168,57 @@ async def randompost(rule: str = "updated"):
     
     return random.choice(article_data)
 
+@app.get("/post")
+async def post(link: str, num: int = -1, rule: str = "updated"):
+    list = ['title','link','created','updated']
+    # Verify key
+    initleancloud()
+
+    # Declare class
+    Friendspoor = leancloud.Object.extend('friend_poor')
+    query = Friendspoor.query
+    query.descending('created')
+    query.limit(1000)
+
+    # Choose class
+    query.select('title','created','updated','link','author','avatar','createdAt')
+    query_list = query.find()
+    
+    author = null
+    avatar = null
+    article_num  = null
+    api_json = {}
+    
+    article_data_init = []
+    article_data = []
+    for item in query_list:
+        itemlist = {}
+        if item.get('link').startswith(link):
+            if author == null: author = item.get('author')
+            if avatar == null: avatar = item.get('avatar')
+            for elem in list:
+                itemlist[elem] = item.get(elem)
+            article_data_init.append(itemlist)
+    
+    article_num = len(article_data_init)
+    api_json['statistical_data'] = {
+        "author": author,
+        "link": link,
+        "avatar": avatar,
+        "article_num": article_num
+    }
+    
+    if num == -1 or num > min(article_num, 1000): num = min(article_num, 1000)
+    if num <= 0: return {"message": "num error"}
+    article_data_init.sort(key=lambda x : x[rule], reverse=True)
+    index = 1
+    for item in article_data_init:
+        item["floor"] = index
+        index += 1
+        article_data.append(item)
+
+    api_json['article_data'] = article_data[:num]
+    return api_json
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1")
