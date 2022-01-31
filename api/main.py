@@ -5,6 +5,8 @@ import uvicorn
 import leancloud
 import os
 import random
+import requests
+import json
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -249,6 +251,91 @@ async def post(link: str = None, num: int = -1, rule: str = "updated"):
 
     api_json['article_data'] = article_data[:num]
     return api_json
+
+@app.get("/postjson")
+async def postjson(jsonlink: str, start: int = 0, end: int = -1, rule: str = "updated"):
+    '''获取公共库中指定链接列表的文章信息列表
+
+    :param jsonlink: 【必选】友链链接json的cdn地址，json格式为["https://noionion.top/", "https://akilar.top/", ...]，参数如jsonlist=https://pub-noionion.oss-cn-hangzhou.aliyuncs.com/friendlink.json
+
+    :param start: 【可选】文章信息列表从 按rule排序后的顺序 的开始位置，默认为0，超出范围返回{"message": "start error"}
+
+    :param end: 【可选】文章信息列表从 按rule排序后的顺序 的结束位置，默认为-1（即最大），其它非正数返回{"message": "end error"}
+    
+    :param rule: 【可选】文章排序规则（创建时间/更新时间），默认为updated，参数错误返回{"message": "rule error, please use 'created'/'updated'"}
+    '''
+    list = ['title','created','updated','link','author','avatar']
+    # Verify key
+    initleancloud()
+
+    # Declare class
+    Friendspoor = leancloud.Object.extend('friend_poor')
+    query = Friendspoor.query
+    query.descending('created')
+    query.limit(1000)
+
+    # Choose class
+    query.select('title','created','updated','link','author','avatar','createdAt')
+    query_list = query.find()
+
+    headers = {
+        "Cookie": "arccount62298=c; arccount62019=c",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36 Edg/87.0.664.66"
+    }
+    jsonhtml = requests.get(jsonlink, headers=headers).text
+    linklist = json.loads(jsonhtml)
+
+    api_json = {}
+    
+    article_data_init = []
+    article_data = []
+    linkinPubLibrary_set = set()
+    for item in query_list:
+        for link in linklist:
+            if link.startswith('http'):
+                links = link.split('/')[2]
+            else:
+                links = link
+            if links in item.get('link'):
+                linkinPubLibrary_set.add(link)
+                itemlist = {}
+                for elem in list:
+                    itemlist[elem] = item.get(elem)
+                article_data_init.append(itemlist)
+                break
+    
+    article_num = len(article_data_init)
+    if end == -1 or end > min(article_num, 1000): end = min(article_num, 1000)
+    if start < 0 or start >= min(article_num, 1000):
+        return {"message": "start error"}
+    if end <= 0:
+        return {"message": "end error"}
+    if rule != "created" and rule != "updated":
+        return {"message": "rule error, please use 'created'/'updated'"}
+    article_data_init.sort(key=lambda x : x[rule], reverse=True)
+    index = 1
+    for item in article_data_init:
+        item["floor"] = index
+        index += 1
+        article_data.append(item)
+
+    friends_num = len(linklist)
+    linkinPubLibrary_num = len(linkinPubLibrary_set)
+    linknoninPub_list = [link for link in linklist if link not in linkinPubLibrary_set]
+    linknoninPub_num = len(linknoninPub_list)
+    last_updated_time = max([item.get('createdAt').strftime('%Y-%m-%d %H:%M:%S') for item in query_list])
+
+    api_json['statistical_data'] = {
+        'friends_num': friends_num,
+        'linkinPubLibrary_num': linkinPubLibrary_num,
+        'linknoninPub_num': linknoninPub_num,
+        'article_num': article_num,
+        'last_updated_time': last_updated_time,
+        'linknoninPub_list': linknoninPub_list
+    }
+    api_json['article_data'] = article_data[start:end]
+    return api_json
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1")
