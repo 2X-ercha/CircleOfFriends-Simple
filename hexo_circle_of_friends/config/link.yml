@@ -1,186 +1,161 @@
-# link + feed 即为你的feed链接
-# 如 https://noionion.top/atom.xml
-#   link: https://noionion.top/ （主页地址）
-#   feed: atom.xml              （feed的相对地址）
-
 - name: 小冰博客
   link: https://zfe.space/
-  feed: atom.xml
+  feed: https://zfe.space/atom.xml
   avatar: https://zfe.space/images/headimage.png
-  rule: atom
   descr: 做个有梦想的人！
 
 - name: Akilarの糖果屋
   link: https://akilar.top/
-  feed: atom.xml
+  feed: https://akilar.top/atom.xml
   avatar: https://akilar.top/img/siteicon/favicon.png
-  rule: atom
   descr: 期待您的光临！
 
 - name: Heo
   link: https://blog.zhheo.com/
-  feed: rss.xml
+  feed: https://blog.zhheo.com/rss.xml
   avatar: https://blog.zhheo.com/img/avatar.png
-  rule: atom
   descr: 爱折腾的设计师
 
 - name: 贰猹の小窝
   link: https://noionion.top/
-  feed: atom.xml
+  feed: https://noionion.top/atom.xml
   avatar: https://noionion-picture-bed.oss-cn-hangzhou.aliyuncs.com/img/head.jpg
-  rule: atom
   descr: 用这生命中的每一秒，给自己一个不后悔的未来
 
 - name: 羿潇贤鱼の窝
   link: https://blog.raxianch.moe/
-  feed: atom.xml
+  feed: https://blog.raxianch.moe/atom.xml
   avatar: https://q1.qlogo.cn/g?b=qq&nk=1025212779&s=5
-  rule: atom
   descr: 为之则易，不为则难
 
 - name: Black Flies
   link: https://www.yyyzyyyz.cn/
-  feed: atom.xml
+  feed: https://www.yyyzyyyz.cn/atom.xml
   avatar: https://cdn.jsdelivr.net/gh/hiltay/imgcdn/img/202111191951780.JPG
-  rule: atom
   descr: When nothing goes right,just go left.
 
 - name: 木木木木木
   link: https://immmmm.com/
-  feed: atom.xml
+  feed: https://immmmm.com/atom.xml
   avatar: https://gravatar.loli.net/avatar/ba83fa02fc4b2ba621514941307e21be
-  rule: atom
   descr: 不问明天，悠然浪费
 
 - name: 小孙同学
   link: https://sunguoqi.com/
-  feed: atom.xml
+  feed: https://sunguoqi.com/atom.xml
   avatar: https://sunguoqi.com/images/avatar.jpg
-  rule: atom
   descr: 一个理性的浪漫主义者！
 
 - name: ChenYFanのSite
   link: https://blog.cyfan.top/
-  feed: atom.xml
+  feed: https://blog.cyfan.top/atom.xml
   avatar: https://npm.elemecdn.com/chenyfan-cdn@2.0.0/img/avatar.png
-  rule: atom
   descr: 一个在互联网角落挣扎的小小博客，很小很小
 
 - name: 小N同学
   link: https://www.nesxc.com/
-  feed: feed/
+  feed: https://www.nesxc.com/feed/
   avatar: https://public.cdn.nesxc.com/avatar.jpg
-  rule: rss
   descr: 青石落晚巷 故人未还乡
 
 - name: 梦落の小屋
   link: https://blog.dreamfall.cn/
-  feed: atom.xml
+  feed: https://blog.dreamfall.cn/atom.xml
   avatar: https://home.dreamfall.cn/source/img/avatar.jpg
-  rule: atom
   descr: 欢迎来我的鸟窝作伴~
 
 - name: 风祈的时光录
   link: https://imlql.cn/
-  feed: atom.xml
+  feed: https://imlql.cn/atom.xml
   avatar: https://gitee.com/youthlql/randombg/raw/master/avatar/1.jpg
-  rule: atom
   descr: 主要是Java技术栈的博客，比较偏原理，源码类型的博主
 
 - name: Tianli's blog
   link: https://tianli-blog.club/
-  feed: atom.xml
+  feed: https://tianli-blog.club/atom.xml
   avatar: https://img1.tianli0.top/logo.png
-  rule: atom
   descr: 惟其不可能，所以才相信。
 
 - name: impdx的博客
   link: https://www.impdx.vip/
-  feed: atom.xml
+  feed: https://www.impdx.vip/atom.xml
   avatar: https://www.impdx.vip/imgs/avatar.png
-  rule: atom
   descr: 越学习，越发现自己的无知——笛卡尔
 
 - name: W4J1e's blog
   link: https://hin.cool/
-  feed: atom.xml
+  feed: https://hin.cool/atom.xml
   avatar: https://hin.cool/favicon.ico
-  rule: atom
   descr: 总是偏爱不务正业
 
 - name: Gahotx
   link: https://gahotx.cn/
-  feed: atom.xml
+  feed: https://gahotx.cn/atom.xml
   avatar: https://pub.gahotx.cn/photo/cat.jpg
-  rule: atom
   descr: Don'trepeatyourself
 
 - name: FanHeart
   link: https://hesifan.top/
-  feed: atom.xml
+  feed: https://hesifan.top/atom.xml
   avatar: https://hesifan.top/medias/avatar.jpg
-  rule: atom
   descr: 念念不忘 必有回响
 
 - name: FiveFire的博客
   link: https://fivefirex.github.io/
-  feed: atom.xml
+  feed: https://fivefirex.github.io/atom.xml
   avatar: https://unpkg.com/fivefirex-assets/avatar.jpeg
-  rule: atom
   descr: 啥也不会的菜鸟，开发编程
 
 - name: iMaeGoo’s Blog
   link: https://www.imaegoo.com/
-  feed: atom.xml
+  feed: https://www.imaegoo.com/atom.xml
   avatar: https://cravatar.cn/avatar/05bb2aa29c9da6ef65fabd321135e7b6?s=200
-  rule: atom
   descr: 虹墨空间站
 
 - name: TNXG's Blog
   link: https://tnxg.loyunet.cn/
-  feed: atom.xml
+  feed: https://tnxg.loyunet.cn/atom.xml
   avatar: https://tnxg.loyunet.cn/assets/images/favicon.png
-  rule: atom
   descr: 一只没钱买server的fw的博客
 
 - name: 多米诺的blog
   link: https://blog.dominoh.com/
-  feed: atom.xml
+  feed: https://blog.dominoh.com/atom.xml
   avatar: https://bu.dusays.com/2021/12/21/4f20cbfa55e12.png
-  rule: atom
   descr: Vlogger · TRPG云玩家 · 养了只猫 · 想去旅拍
 
 - name: LanYunのBlog
   link: https://lanyundev.vercel.app/
-  feed: atom.xml
+  feed: https://lanyundev.vercel.app/atom.xml
   avatar: https://lanyundev.vercel.app/img/logo2.jpg
-  rule: atom
   descr: Share Technology.
 
 - name: iYuan's Blog
   link: https://o0.work/
-  feed: atom.xml
+  feed: https://o0.work/atom.xml
   avatar: https://npm.elemecdn.com/iyuancdn@latest/img/avatar.jpg
-  rule: atom
   descr: 不患人之不己知，患不知人也
 
 - name: 星空下的YZY
   link: https://226yzy.com/
-  feed: atom.xml
+  feed: https://226yzy.com/atom.xml
   avatar: https://s4.ax1x.com/2021/12/11/oTDujJ.jpg
-  rule: atom
   descr: 记录一枚菜鸟的征程
 
 - name: Hajeekn's Blog
   link: https://blog.slqwq.cn/
-  feed: atom.xml
+  feed: https://blog.slqwq.cn/atom.xml
   avatar: https://npm.elemecdn.com/perorepe-cdn@1.0.0/v1/static-files/avatar.webp
-  rule: atom
   descr: 梦中做梦,做了个白日梦
 
 - name: Rootlex's Blog
   link: https://blog.nalex.top/
-  feed: feed/atom
+  feed: https://blog.nalex.top/feed/atom
   avatar: https://bu.dusays.com/2022/01/24/445fb4d1af3e6.jpg
-  rule: atom
   descr: 寒蝉黎明之时，便是重生之日 !
+
+- name: 小康博客
+  link: https://www.antmoe.com/
+  feed: https://www.antmoe.com/atom.xml
+  avatar: https://cdn.jsdelivr.net/npm/kang-static@latest/avatar.jpg
+  descr: 一个收藏回忆与分享技术的地方！

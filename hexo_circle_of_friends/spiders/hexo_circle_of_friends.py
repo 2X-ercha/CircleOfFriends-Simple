@@ -3,6 +3,7 @@
 import time
 import scrapy
 import queue
+import feedparser
 from scrapy import Request
 from hexo_circle_of_friends.utils.regulations import *
 import yaml
@@ -28,68 +29,51 @@ class FriendpageLinkSpider(scrapy.Spider):
             self.friend_poor.put(friend)
         
         # 请求atom / rss
-        rule_mate = {"atom": self.post_atom_parse, "rss": self.post_rss_parse}
         while not self.friend_poor.empty():
             friend = self.friend_poor.get()
             self.friend_list.put(friend)
             friend["link"] += "/" if not friend["link"].endswith("/") else ""
-            yield Request(friend["link"] + friend["feed"], callback=rule_mate[friend["rule"]], meta={"friend": friend}, dont_filter=True, errback=self.errback_handler)
+            yield Request(friend["feed"], callback=self.post_feed_parse, meta={"friend": friend}, dont_filter=True, errback=self.errback_handler)
             
-    def post_atom_parse(self, response):
-        # print("post_atom_parse---------->" + response.url)
+    def post_feed_parse(self, response):
+        # print("post_feed_parse---------->" + response.url)
         friend = response.meta.get("friend")
-        sel = scrapy.Selector(text=response.text.replace('<![CDATA[', '').replace(']]>', ''))
-        title = sel.css("entry title::text").extract()
-        link = sel.css("entry title+link::attr(href)").extract()
-        published = sel.css("entry published::text").extract()
-        updated = sel.css("entry updated::text").extract()
- 
-        if len(title) == len(link) == len(published) == len(updated):
-            l = len(title) if len(title) < 5 else 5
-            try:
-                for i in range(l):
-                    post_info = {
-                        'title': title[i],
-                        'created': published[i][:10],
-                        'updated': updated[i][:10],
-                        'link': link[i],
-                        'name': friend["name"],
-                        'avatar': friend["avatar"],
-                        'rule': "atom"
-                    }
-                    yield post_info
-            except:
-                pass
-
-    def post_rss_parse(self, response):
-        # print("post_rss_parse---------->" + response.url)
-        friend = response.meta.get("friend")
-        sel = scrapy.Selector(text=response.text)
-        title = sel.css("item title::text").extract()
-        link = [comm.split("#")[0] for comm in sel.css("item link+comments::text").extract()]  # 紧跟link后的首个comments
-        if len(link) == 0: link = [comm.split("#")[0] for comm in sel.css("item comments::text").extract()]
-        pubDate = sel.css("item pubDate::text").extract()
-        # print(link)
-
-        if len(title) == len(link) == len(pubDate):
-            l = len(title) if len(title) < 5 else 5
-            try:
-                for i in range(l):
-                    m = pubDate[i].split(" ")
-                    ts = time.strptime(m[3] + "-" + m[2] + "-" + m[1], "%Y-%b-%d")
-                    date = time.strftime("%Y-%m-%d", ts)
-                    post_info = {
-                        'title': title[i],
-                        'created': date,
-                        'updated': date,
-                        'link': link[i],
-                        'name': friend["name"],
-                        'avatar': friend["avatar"],
-                        'rule': "rss"
-                    }
-                    yield post_info
-            except:
-                pass
+        xml_text = feedparser.parse(response.text)
+        feedlink = xml_text.feed.link
+        entries = xml_text.entries
+        rule = xml_text.version
+        l = len(entries) if len(entries) < 5 else 5
+        for i in range(l):
+            entry = entries[i]
+            # 文章标题
+            entrytitle = entry.title
+            # 文章链接
+            entrylink = entry.link
+            if not entrylink.startswith('http'): entrylink = feedlink + entrylink # 相对链接校验
+            # 创建时间
+            try: entrycreated_parsed = entry.created_parsed
+            except: 
+                try: entrycreated_parsed = entry.published_parsed
+                except: entrycreated_parsed = entry.updated_parsed
+            entrycreated = "{:4d}-{:02d}-{:02d}".format(entrycreated_parsed[0], entrycreated_parsed[1], entrycreated_parsed[2])
+            # 更新时间
+            try: entryupdated_parsed = entry.updated_parsed
+            except: 
+                try: entryupdated_parsed = entry.published_parsed
+                except: entryupdated_parsed = entry.created_parsed
+            entryupdated = "{:4d}-{:02d}-{:02d}".format(entryupdated_parsed[0], entryupdated_parsed[1], entryupdated_parsed[2])
+            
+            # 建立文章信息
+            post_info = {
+                'title': entrytitle,
+                'created': entrycreated,
+                'updated': entryupdated,
+                'link': entrylink,
+                'name': friend["name"],
+                'avatar': friend["avatar"],
+                'rule': rule
+            }
+            yield post_info
 
     def errback_handler(self, error):
         # 错误回调
