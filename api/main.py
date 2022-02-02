@@ -290,22 +290,19 @@ async def postjson(jsonlink: str, start: int = 0, end: int = -1, rule: str = "up
     article_data_init = []
     article_data = []
     linkinPubLibrary_set = set()
-    linkset = set()
     for item in query_list:
         for link in linklist:
             if link.startswith('http'):
                 links = link.split('/')[2]
             else:
                 links = link
-            if links not in linkset:
-                linkset.add(links)
-                if links in item.get('link'):
-                    linkinPubLibrary_set.add(link)
-                    itemlist = {}
-                    for elem in list:
-                        itemlist[elem] = item.get(elem)
-                    article_data_init.append(itemlist)
-                    break
+            if links in item.get('link'):
+                linkinPubLibrary_set.add(link)
+                itemlist = {}
+                for elem in list:
+                    itemlist[elem] = item.get(elem)
+                article_data_init.append(itemlist)
+                break
     
     article_num = len(article_data_init)
     if end == -1 or end > min(article_num, 1000): end = min(article_num, 1000)
