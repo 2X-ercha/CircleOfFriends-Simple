@@ -283,7 +283,10 @@ async def postjson(jsonlink: str, start: int = 0, end: int = -1, rule: str = "up
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36 Edg/87.0.664.66"
     }
     jsonhtml = requests.get(jsonlink, headers=headers).text
-    linklist = list(set(json.loads(jsonhtml)))
+    linklist = json.loads(jsonhtml)
+    
+    linkset = set()
+    for link in linklist: linkset.add(link)
 
     api_json = {}
     
@@ -319,7 +322,7 @@ async def postjson(jsonlink: str, start: int = 0, end: int = -1, rule: str = "up
         index += 1
         article_data.append(item)
 
-    friends_num = len(linklist)
+    friends_num = len(linkset)
     linkinPubLibrary_num = len(linkinPubLibrary_set)
     linknoninPub_list = [link for link in linklist if link not in linkinPubLibrary_set]
     linknoninPub_num = len(linknoninPub_list)
