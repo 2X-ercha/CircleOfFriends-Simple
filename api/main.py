@@ -29,7 +29,7 @@ app.add_middleware(
 def initleancloud():
     leancloud.init(os.environ["LEANCLOUD_ID"], os.environ["LEANCLOUD_KEY"])
 
-@app.get("/api")
+@app.get("/all")
 async def all(start: int = 0, end: int = -1, rule: str = "updated"):
     '''返回数据库统计信息和文章信息列表
 
