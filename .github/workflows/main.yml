@@ -34,6 +34,7 @@ jobs:
         pip install -r requirements.txt
     
     - name: sqlite Update posts # sqlite
+      working-directory: ./hexo_circle_of_friends
       env:
         SQLITE_DB: ${{ secrets.SQLITE_DB }}
       run: |
