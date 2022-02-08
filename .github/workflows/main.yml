@@ -9,6 +9,12 @@ on:
   watch:
     types: [started]
 
+env:
+  # sqlite配置，用于将db文件上传到github仓库
+  GITHUB_NAME: ${{ secrets.GH_NAME }} # 你的github昵称
+  GITHUB_EMAIL: ${{ secrets.GH_EMAIL }} # 你的github邮箱
+  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} # github token
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,18 +22,29 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@master
-    - name: Set up Python #安装python
+
+    - name: Set up Python
       uses: actions/setup-python@v1
       with:
         python-version: 3.8
-    - name: Install requirements 
+
+    - name: Install requirements
       working-directory: ./hexo_circle_of_friends
       run: |
-        pip install -r requirement.txt
-    - name: Update posts #更新
+        pip install -r requirements.txt
+    
+    - name: sqlite Update posts # sqlite
       env:
-        $APP_ID: ${{ secrets.APPID }} 
-        $APP_KEY: ${{ secrets.APPKEY }}
-      working-directory: ./hexo_circle_of_friends
-      run: | 
-        python run.py ${{ secrets.APPID }} ${{ secrets.APPKEY }}
+        SQLITE_DB: ${{ secrets.SQLITE_DB }}
+      run: |
+        python ./hexo_circle_of_friends/run.py
+
+    - name: Push sqlite data # sqlite push
+      uses: github-actions-x/commit@v2.8
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: "Update data.db"
+        files: data.db
+        rebase: 'true'
+        name: ${{ env.GITHUB_NAME }}
+        email: ${{ env.GITHUB_EMAIL }}
