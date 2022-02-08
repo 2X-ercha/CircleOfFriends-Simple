@@ -26,11 +26,11 @@ def db_init():
 def query_all(list, start: int = 0, end: int = -1, rule: str = "updated"):
     session = db_init()
     article_num = session.query(Post).count()
-    if end == -1:
+    if end == -1 or end > min(article_num, 2000):
         end = min(article_num, 2000)
     if start < 0 or start >= min(article_num, 2000):
         return {"message": "start error"}
-    if end <= 0 or end > min(article_num, 2000):
+    if end <= 0 or end <= start:
         return {"message": "end error"}
     if rule != "created" and rule != "updated":
         return {"message": "rule error, please use 'created'/'updated'"}
@@ -189,11 +189,11 @@ def query_post_json(jsonlink, list, start, end, rule):
     post_num = len(posts)
     last_update_time = max(x.createAt for x in posts)
 
-    if end == -1:
+    if end == -1 or end > min(post_num, 2000):
         end = min(post_num, 2000)
     if start < 0 or start >= min(post_num, 2000):
         return {"message": "start error"}
-    if end <= 0 or end > min(post_num, 2000):
+    if end <= 0 or end <= start:
         return {"message": "end error"}
     if rule != "created" and rule != "updated":
         return {"message": "rule error, please use 'created'/'updated'"}
