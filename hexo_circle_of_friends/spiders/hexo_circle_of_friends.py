@@ -22,7 +22,7 @@ class FriendpageLinkSpider(scrapy.Spider):
 
     def start_requests(self):
         # 从友链配置文件 ./config/link.yml 导入友链列表
-        with open(".hexo_circle_of_friends/config/link.yml",  "r", encoding="utf-8") as f:
+        with open("./hexo_circle_of_friends/config/link.yml",  "r", encoding="utf-8") as f:
             friends = yaml.load(f.read())
         for friend in friends:
             self.friend_poor.put(friend)
