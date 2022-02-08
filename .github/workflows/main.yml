@@ -34,11 +34,10 @@ jobs:
         pip install -r requirements.txt
     
     - name: sqlite Update posts # sqlite
-      working-directory: ./hexo_circle_of_friends
       env:
         SQLITE_DB: ${{ secrets.SQLITE_DB }}
       run: |
-        python run.py
+        python ./hexo_circle_of_friends/run.py
 
     - name: Push sqlite data # sqlite push
       uses: github-actions-x/commit@v2.8

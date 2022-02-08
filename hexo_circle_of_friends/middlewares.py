@@ -5,13 +5,12 @@
 import sys
 
 from scrapy import signals
-from settings import USER_AGENT_LIST
+from hexo_circle_of_friends.settings import USER_AGENT_LIST
 import random
-import settings
-import re
-from scrapy.exceptions import IgnoreRequest
+from hexo_circle_of_friends import settings
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+
 class RandomUserAgentMiddleware:
     # 随机User-Agent
     def process_request(self, request, spider):
