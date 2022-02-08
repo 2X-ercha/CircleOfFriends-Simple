@@ -1,7 +1,7 @@
 {
     "version": 2,
     "public": true,
-    "builds": [{ "src": "main.py", "use": "@vercel/python" }],
+    "builds": [{ "src": "api/main.py", "use": "@vercel/python" }],
     "routes": [
         { "src": "/all", "dest": "api/main.py" },
         { "src": "/friend", "dest": "api/main.py" },
