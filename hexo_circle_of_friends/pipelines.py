@@ -51,7 +51,7 @@ class HexoCircleOfFriendsPipeline:
         # 删除friend表
         self.session.query(models.Friend).delete()
         # 获取post表数据
-        self.query_post()
+        self.query_friendspoor()
 
 
     def process_item(self, item, spider):
