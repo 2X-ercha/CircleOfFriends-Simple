@@ -59,7 +59,7 @@ class HexoCircleOfFriendsPipeline:
         # rss创建时间保留
         for query_item in self.query_post_list:
             if query_item.link == item["link"]:
-                item["created"] = min(item['created'], query_item.get('created'))
+                item["created"] = min(item['created'], query_item.created)
                 '''
                 delete = self.Friendspoor.create_without_data(query_item.get('objectId'))
                 delete.destroy()
