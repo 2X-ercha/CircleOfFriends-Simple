@@ -38,7 +38,7 @@ jobs:
       env:
         SQLITE_DB: ${{ secrets.SQLITE_DB }}
       run: |
-        python ./hexo_circle_of_friends/run.py
+        python run.py
 
     - name: Push sqlite data # sqlite push
       uses: github-actions-x/commit@v2.8
