@@ -27,17 +27,17 @@ def query_all(list, start: int = 0, end: int = -1, rule: str = "updated"):
     session = db_init()
     article_num = session.query(Post).count()
     if end == -1:
-        end = min(article_num, 1000)
-    if start < 0 or start >= min(article_num, 1000):
+        end = min(article_num, 2000)
+    if start < 0 or start >= min(article_num, 2000):
         return {"message": "start error"}
-    if end <= 0 or end > min(article_num, 1000):
+    if end <= 0 or end > min(article_num, 2000):
         return {"message": "end error"}
     if rule != "created" and rule != "updated":
         return {"message": "rule error, please use 'created'/'updated'"}
 
     posts = session.query(Post).order_by(desc(rule)).offset(start).limit(end - start).all()
-    last_update_time = session.query(Post).limit(1000).with_entities(Post.createAt).all()
-    last_update_time = max(x["createAt"].strftime("%Y-%m-%d %H:%M:%S") for x in last_update_time)
+    last_update_time = session.query(Post).limit(2000).all()
+    last_update_time = max(x.createAt for x in last_update_time)
 
     friends_num = session.query(Friend).count()
     active_num = session.query(Friend).filter_by(error=False).count()
@@ -54,7 +54,7 @@ def query_all(list, start: int = 0, end: int = -1, rule: str = "updated"):
 
     post_data = []
     for k in range(len(posts)):
-        item = {'floor': start+ k + 1}
+        item = {'floor': start + k + 1}
         for elem in list:
             item[elem] = getattr(posts[k], elem)
         post_data.append(item)
@@ -65,7 +65,7 @@ def query_all(list, start: int = 0, end: int = -1, rule: str = "updated"):
 
 def query_friend():
     session = db_init()
-    friends = session.query(Friend).limit(1000).all()
+    friends = session.query(Friend).limit(2000).all()
     session.close()
 
     friend_list_json = []
@@ -171,7 +171,7 @@ def query_post_json(jsonlink, list, start, end, rule):
     }
     jsonhtml = requests.get(jsonlink, headers=headers).text
     linklist = set(json.loads(jsonhtml))
-    if linklist:
+    if len(linklist) == 0:
         # 如果为空直接返回
         return {"message": "not found"}
 
@@ -183,16 +183,17 @@ def query_post_json(jsonlink, list, start, end, rule):
         if data:
             posts += data
             active_list.append(link)
+            print(link)
 
     posts.sort(key=lambda x: getattr(x, rule), reverse=True)
     post_num = len(posts)
-    last_update_time = max(x.createAt.strftime("%Y-%m-%d %H:%M:%S") for x in posts)
+    last_update_time = max(x.createAt for x in posts)
 
     if end == -1:
-        end = min(post_num, 1000)
-    if start < 0 or start >= min(post_num, 1000):
+        end = min(post_num, 2000)
+    if start < 0 or start >= min(post_num, 2000):
         return {"message": "start error"}
-    if end <= 0 or end > min(post_num, 1000):
+    if end <= 0 or end > min(post_num, 2000):
         return {"message": "end error"}
     if rule != "created" and rule != "updated":
         return {"message": "rule error, please use 'created'/'updated'"}
