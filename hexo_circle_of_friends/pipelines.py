@@ -113,6 +113,7 @@ class HexoCircleOfFriendsPipeline:
                     item["created"] = min(item['created'], query_item.created)
                     self.session.query(models.Post).filter_by(id=query_item.id).delete()
                     self.session.commit()
+                    break
             post = models.Post(
                 title = item['title'],
                 created = item['created'],
