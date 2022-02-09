@@ -32,18 +32,6 @@ class HexoCircleOfFriendsPipeline:
                 self.friend_info.append(friend)
     
     def open_spider(self, spider):
-        '''
-        leancloud.init(sys.argv[1], sys.argv[2])
-        self.Friendslist = leancloud.Object.extend('friend_list')
-        self.Friendspoor = leancloud.Object.extend('friend_poor')
-        self.query_friendslist()
-        self.query_friendspoor()
-        # 友链清洗
-        for query_j in self.query_friend_list:
-            delete = self.Friendslist.create_without_data(query_j.get('objectId'))
-            delete.destroy()
-        '''
-
         conn = "sqlite:///data.db"
         try:
             self.engine = create_engine(conn,pool_recycle=-1)
@@ -56,21 +44,20 @@ class HexoCircleOfFriendsPipeline:
         # 删除friend表
         self.session.query(models.Friend).delete()
         # 获取post表数据
-        self.query_friendspoor()
+        self.query_post()
 
 
     def process_item(self, item, spider):
         self.nonerror_data.add(item["name"])
         # rss创建时间保留
         for query_item in self.query_post_list:
-            if query_item.link == item["link"]:
-                item["created"] = min(item['created'], query_item.created)
-                '''
-                delete = self.Friendspoor.create_without_data(query_item.get('objectId'))
-                delete.destroy()
-                '''
-                self.session.query(models.Post).filter_by(id=query_item.id).delete()
-                self.session.commit()
+            try:
+                if query_item.link == item["link"]:
+                    item["created"] = min(item['created'], query_item.created)
+                    self.session.query(models.Post).filter_by(id=query_item.id).delete()
+                    self.session.commit()
+            except:
+                pass
         self.friendpoor_push(item)
         return item
 
@@ -87,30 +74,11 @@ class HexoCircleOfFriendsPipeline:
 
 
     # 文章数据查询
-    def query_friendspoor(self):
+    def query_post(self):
         try:
-            '''
-            query = self.Friendspoor.query
-            query.select('title', 'created', 'link', 'updated')
-            query.limit(1000)
-            self.query_post_list = query.find()
-            # print(self.query_post_list)
-            '''
             self.query_post_list = self.session.query(models.Post).all()
         except:
             self.query_post_list=[]
-    
-    '''
-    # 友链数据查询
-    def query_friendslist(self):
-        try:
-            query = self.Friendslist.query
-            query.select('name', 'link', 'avatar', 'error')
-            query.limit(1000)
-            self.query_friend_list = query.find()
-        except:
-            self.query_friend_list=[]
-    '''
 
     # 超时清洗
     def outdate_clean(self,time_limit):
@@ -119,11 +87,6 @@ class HexoCircleOfFriendsPipeline:
             updated = query_i.updated
             query_time = datetime.datetime.strptime(updated, "%Y-%m-%d")
             if (datetime.datetime.today() - query_time).days > time_limit:
-                '''
-                delete = self.Friendspoor.create_without_data(query_i.get('objectId'))
-                out_date_post += 1
-                delete.destroy()
-                '''
                 self.session.query(models.Post).filter_by(id=query_i.id).delete()
                 out_date_post += 1
                 self.session.commit()
@@ -131,13 +94,6 @@ class HexoCircleOfFriendsPipeline:
     # 友链数据上传
     def friendlist_push(self):
         for item in self.friend_info:
-            '''
-            friendlist = self.Friendslist()
-            friendlist.set('name', item["name"])
-            friendlist.set('link', item["link"])
-            friendlist.set('avatar', item["avatar"])
-            friendlist.set('descr', item["descr"])
-            '''
             friend = models.Friend(
                 name = item['name'],
                 link = item['link'],
@@ -157,17 +113,6 @@ class HexoCircleOfFriendsPipeline:
 
     # 文章数据上传
     def friendpoor_push(self,item):
-        '''
-        friendpoor = self.Friendspoor()
-        friendpoor.set('title', item['title'])
-        friendpoor.set('created', item['created'])
-        friendpoor.set('updated', item['updated'])
-        friendpoor.set('link', item['link'])
-        friendpoor.set('author', item['name'])
-        friendpoor.set('avatar', item['avatar'])
-        friendpoor.set('rule', item['rule'])
-        friendpoor.save()
-        '''
         post = models.Post(
             title = item['title'],
             created = item['created'],

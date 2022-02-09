@@ -76,5 +76,4 @@ else:
     with open("hexo_circle_of_friends/config/From_saveweb.yml", "w", encoding="utf-8") as f:
         yaml.dump(friends, f, Dumper=yaml.RoundTripDumper, allow_unicode=True)
 
-
 execute(['scrapy','crawl','hexo_circle_of_friends'])
