@@ -205,6 +205,8 @@ class DuplicatesPipeline:
             raise DropItem("invalid time")
         elif (datetime.datetime.today() - datetime.datetime.strptime(item['updated'], "%Y-%m-%d")).days < 0:
             raise DropItem("invalid feature")
+        elif (datetime.datetime.today() - datetime.datetime.strptime(item['created'], "%Y-%m-%d")).days < 0:
+            raise DropItem("invalid feature")
         else:
             self.poor_set.add(link)
             return item
