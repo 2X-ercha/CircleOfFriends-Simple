@@ -50,7 +50,7 @@ class HexoCircleOfFriendsPipeline:
 
     def process_item(self, item, spider):
         self.nonerror_data.add(item["name"])
-        self.post_info.add(item)
+        self.post_info.append(item)
         return item
 
     def close_spider(self, spider):
