@@ -214,8 +214,8 @@ def query_post_json(jsonlink, list, start, end, rule):
     data = {}
     data['statistical_data'] = {
         'friends_num': friends_num,
-        'linkinPubLibrary_num': active_num,
-        'linknoninPub_num': friends_num - active_num,
+        'active_num': active_num,
+        'error_num': friends_num - active_num,
         'article_num': post_num,
         'last_updated_time': last_update_time,
         'linknoninPub_list': error_list

@@ -203,6 +203,8 @@ class DuplicatesPipeline:
         elif not re.match("^\d+",item["updated"]):
             # 时间不是xxxx-xx-xx格式，丢弃
             raise DropItem("invalid time")
+        elif (datetime.datetime.today() - datetime.datetime.strptime(item['updated'], "%Y-%m-%d")).days < 0:
+            raise DropItem("invalid feature")
         else:
             self.poor_set.add(link)
             return item
