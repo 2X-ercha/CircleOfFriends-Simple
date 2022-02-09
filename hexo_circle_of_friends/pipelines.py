@@ -12,6 +12,7 @@ from sqlalchemy.orm import sessionmaker,scoped_session
 class HexoCircleOfFriendsPipeline:
     def __init__(self):
         self.friend_info = []
+        self.post_info = []
         self.nonerror_data = set() # 未失联友链link集合
 
         self.total_post_num = 0
@@ -49,20 +50,12 @@ class HexoCircleOfFriendsPipeline:
 
     def process_item(self, item, spider):
         self.nonerror_data.add(item["name"])
-        # rss创建时间保留
-        for query_item in self.query_post_list:
-            try:
-                if query_item.link == item["link"]:
-                    item["created"] = min(item['created'], query_item.created)
-                    self.session.query(models.Post).filter_by(id=query_item.id).delete()
-                    self.session.commit()
-            except:
-                pass
-        self.friendpoor_push(item)
+        self.post_info.add(item)
         return item
 
     def close_spider(self, spider):
         self.friendlist_push()
+        self.friendpoor_push()
         self.outdate_clean(settings.OUTDATE_CLEAN)
 
         print("----------------------")
@@ -112,22 +105,29 @@ class HexoCircleOfFriendsPipeline:
             self.total_friend_num+=1
 
     # 文章数据上传
-    def friendpoor_push(self,item):
-        post = models.Post(
-            title = item['title'],
-            created = item['created'],
-            updated = item['updated'],
-            link = item['link'],
-            author = item['name'],
-            avatar = item['avatar'],
-            rule = item['rule']
-        )
-        self.session.add(post)
-        self.session.commit()
-        print("----------------------")
-        print(item["name"])
-        print("《{}》\n文章发布时间：{}\t\t采取的爬虫规则为：{}".format(item["title"], item["updated"], item["rule"]))
-        self.total_post_num +=1
+    def friendpoor_push(self):
+        for item in self.post_info:
+            # rss创建时间保留
+            for query_item in self.query_post_list:
+                if query_item.link == item["link"]:
+                    item["created"] = min(item['created'], query_item.created)
+                    self.session.query(models.Post).filter_by(id=query_item.id).delete()
+                    self.session.commit()
+            post = models.Post(
+                title = item['title'],
+                created = item['created'],
+                updated = item['updated'],
+                link = item['link'],
+                author = item['name'],
+                avatar = item['avatar'],
+                rule = item['rule']
+            )
+            self.session.add(post)
+            self.session.commit()
+            print("----------------------")
+            print(item["name"])
+            print("《{}》\n文章发布时间：{}\t\t采取的爬虫规则为：{}".format(item["title"], item["updated"], item["rule"]))
+            self.total_post_num +=1
 
 class DuplicatesPipeline:
     def __init__(self):
