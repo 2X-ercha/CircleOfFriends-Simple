@@ -36,8 +36,9 @@ jobs:
     - name: sqlite Update posts # sqlite
       env:
         SQLITE_DB: ${{ secrets.SQLITE_DB }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        python ./hexo_circle_of_friends/run.py
+        python ./hexo_circle_of_friends/run.py $github-token
 
     - name: Push sqlite data # sqlite push
       uses: github-actions-x/commit@v2.8

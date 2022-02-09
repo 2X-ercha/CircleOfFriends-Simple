@@ -20,8 +20,13 @@ class HexoCircleOfFriendsPipeline:
 
         # 友链去重
         self.friend_set = set()
+        # 从友链配置文件 ./config/link.yml 导入友链列表
         with open("./hexo_circle_of_friends/config/link.yml",  "r", encoding="utf-8") as f:
-            self.friends = yaml.load(f.read())
+            friends = yaml.load(f.read())
+        with open("./hexo_circle_of_friends/config/From_saveweb.yml",  "r", encoding="utf-8") as f:
+            From_saveweb = yaml.load(f.read())
+        
+        self.friends = friends + From_saveweb
         for friend in self.friends:
             if friend["link"] not in self.friend_set:
                 self.friend_info.append(friend)
