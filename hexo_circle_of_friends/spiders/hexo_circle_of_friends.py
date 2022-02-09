@@ -6,6 +6,9 @@ import feedparser
 from scrapy import Request
 from hexo_circle_of_friends.utils.regulations import *
 import yaml
+from scrapy.spidermiddlewares.httperror import HttpError
+from twisted.internet.error import DNSLookupError
+from twisted.internet.error import TimeoutError
 
 
 # from hexo_circle_of_friends import items todo use items
@@ -78,14 +81,28 @@ class FriendpageLinkSpider(scrapy.Spider):
             }
             yield post_info
 
-    def errback_handler(self, error):
-        # 错误回调
-        # todo error???
-        # print("errback_handler---------->")
-        # print(error)
-        # request = error.request
-        # meta = error.request.meta
-        pass
+    def errback_handler(self, failure):
+        # log all errback failures,
+        # in case you want to do something special for some errors,
+        # you may need the failure's type
+        self.logger.error(repr(failure))
+
+        #if isinstance(failure.value, HttpError):
+        if failure.check(HttpError):
+            # you can get the response
+            response = failure.value.response
+            self.logger.error('HttpError on %s', response.url)
+
+        #elif isinstance(failure.value, DNSLookupError):
+        elif failure.check(DNSLookupError):
+            # this is the original request
+            request = failure.request
+            self.logger.error('DNSLookupError on %s', request.url)
+
+        #elif isinstance(failure.value, TimeoutError):
+        elif failure.check(TimeoutError):
+            request = failure.request
+            self.logger.error('TimeoutError on %s', request.url)
 
     def typecho_errback_handler(self,error):
         yield Request(error.request.url,callback=self.post_atom_parse,dont_filter=True,meta=error.request.meta,errback=self.errback_handler)
