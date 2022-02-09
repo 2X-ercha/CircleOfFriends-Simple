@@ -69,20 +69,20 @@ class FriendpageLinkSpider(scrapy.Spider):
                     try: entryupdated_parsed = entry.published_parsed
                     except: entryupdated_parsed = entry.created_parsed
                 entryupdated = "{:4d}-{:02d}-{:02d}".format(entryupdated_parsed[0], entryupdated_parsed[1], entryupdated_parsed[2])
+                
+                # 建立文章信息
+                post_info = {
+                    'title': entrytitle,
+                    'created': entrycreated,
+                    'updated': entryupdated,
+                    'link': entrylink,
+                    'name': friend["name"],
+                    'avatar': friend["avatar"],
+                    'rule': rule
+                }
+                yield post_info
         except:
             raise
-            
-        # 建立文章信息
-        post_info = {
-            'title': entrytitle,
-            'created': entrycreated,
-            'updated': entryupdated,
-            'link': entrylink,
-            'name': friend["name"],
-            'avatar': friend["avatar"],
-            'rule': rule
-        }
-        yield post_info
 
     def errback_handler(self, failure):
         # log all errback failures,
