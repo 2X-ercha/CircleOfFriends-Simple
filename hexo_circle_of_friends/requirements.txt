@@ -51,4 +51,3 @@ feedparser==6.0.8
 SQLAlchemy==1.3.18
 ruamel.yaml==0.17.19
 Twisted==21.7.0
-twisted-iocpsupport==1.0.2
