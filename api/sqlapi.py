@@ -13,7 +13,7 @@ from sqlalchemy.sql.expression import desc, func
 
 
 def db_init():
-    conn = "sqlite:///" + BASE_DIR+"/data.db"
+    conn = "sqlite:///" + BASE_DIR + "/data.db" + "?check_same_thread=False"
     try:
         engine = create_engine(conn, pool_recycle=-1)
     except:

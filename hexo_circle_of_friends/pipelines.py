@@ -32,7 +32,7 @@ class HexoCircleOfFriendsPipeline:
                 self.friend_info.append(friend)
     
     def open_spider(self, spider):
-        conn = "sqlite:///data.db"
+        conn = "sqlite:///data.db" + "?check_same_thread=False"
         try:
             self.engine = create_engine(conn,pool_recycle=-1)
         except:
