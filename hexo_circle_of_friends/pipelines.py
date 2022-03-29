@@ -55,12 +55,13 @@ class HexoCircleOfFriendsPipeline:
                 item["created"] = min(item['created'], query_item.created)
                 self.session.query(models.Post).filter_by(id=query_item.id).delete()
                 self.session.commit()
+                break
         self.friendpoor_push(item)
         return item
 
     def close_spider(self, spider):
         self.friendlist_push()
-        self.outdate_clean(settings.OUTDATE_CLEAN)
+        ## self.outdate_clean(settings.OUTDATE_CLEAN)
 
         print("----------------------")
         print("友链总数 : %d" % self.total_friend_num)
