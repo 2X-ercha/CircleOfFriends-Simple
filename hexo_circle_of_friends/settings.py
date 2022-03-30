@@ -39,7 +39,7 @@ USER_AGENT_LIST = [
             "Mozilla/5.0 (X11; U; Linux x86_64; zh-CN; rv:1.9.2.10) Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3.6.10",
         ]
 ROBOTSTXT_OBEY = False
-CONCURRENT_REQUESTS = 48
+CONCURRENT_REQUESTS = 24
 DOWNLOAD_TIMEOUT = 120
 COOKIES_ENABLED = False
 DOWNLOADER_MIDDLEWARES = {
@@ -62,11 +62,6 @@ DEBUG = False
 HTTP_PROXY = False
 HTTP_PROXY_URL = ""
 
-################################以上禁止修改################################
-
-
-################################以下可以修改################################
-# leancloud post data outdate_clean
 # 过期文章清除（天）
 OUTDATE_CLEAN = 60
 
