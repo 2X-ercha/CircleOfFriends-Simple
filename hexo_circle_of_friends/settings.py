@@ -39,8 +39,8 @@ USER_AGENT_LIST = [
             "Mozilla/5.0 (X11; U; Linux x86_64; zh-CN; rv:1.9.2.10) Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3.6.10",
         ]
 ROBOTSTXT_OBEY = False
-CONCURRENT_REQUESTS = 32
-DOWNLOAD_TIMEOUT = 60
+CONCURRENT_REQUESTS = 48
+DOWNLOAD_TIMEOUT = 120
 COOKIES_ENABLED = False
 DOWNLOADER_MIDDLEWARES = {
    # 'hexo_circle_of_friends.middlewares.HexoCircleOfFriendsDownloaderMiddleware': 543,
