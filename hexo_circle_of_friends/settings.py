@@ -40,13 +40,13 @@ USER_AGENT_LIST = [
         ]
 ROBOTSTXT_OBEY = False
 CONCURRENT_REQUESTS = 24
-DOWNLOAD_TIMEOUT = 120
+DOWNLOAD_TIMEOUT = 60
 COOKIES_ENABLED = False
 DOWNLOADER_MIDDLEWARES = {
    # 'hexo_circle_of_friends.middlewares.HexoCircleOfFriendsDownloaderMiddleware': 543,
    'hexo_circle_of_friends.middlewares.RandomUserAgentMiddleware': 400,
-   'hexo_circle_of_friends.middlewares.BlockSiteMiddleware': 300,
-   'hexo_circle_of_friends.middlewares.ProxyMiddleware': 299,
+   # 'hexo_circle_of_friends.middlewares.BlockSiteMiddleware': 300,
+   # 'hexo_circle_of_friends.middlewares.ProxyMiddleware': 299,
 
 }
 

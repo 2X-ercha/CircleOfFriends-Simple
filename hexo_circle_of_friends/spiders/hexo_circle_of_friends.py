@@ -58,13 +58,17 @@ class FriendpageLinkSpider(scrapy.Spider):
                 try: entrycreated_parsed = entry.created_parsed
                 except: 
                     try: entrycreated_parsed = entry.published_parsed
-                    except: entrycreated_parsed = entry.updated_parsed
+                    except:
+                        try: entrycreated_parsed = entry.updated_parsed
+                        except: raise
                 entrycreated = "{:4d}-{:02d}-{:02d}".format(entrycreated_parsed[0], entrycreated_parsed[1], entrycreated_parsed[2])
                 # 更新时间
                 try: entryupdated_parsed = entry.updated_parsed
                 except: 
                     try: entryupdated_parsed = entry.published_parsed
-                    except: entryupdated_parsed = entry.created_parsed
+                    except: 
+                        try: entryupdated_parsed = entry.created_parsed
+                        except: raise
                 entryupdated = "{:4d}-{:02d}-{:02d}".format(entryupdated_parsed[0], entryupdated_parsed[1], entryupdated_parsed[2])
                 
                 # 建立文章信息
