@@ -43,7 +43,8 @@ class FriendpageLinkSpider(scrapy.Spider):
         try:
             friend = response.meta.get("friend")
             xml_text = feedparser.parse(response.text)
-            feedlink = xml_text.feed.link
+            try: feedlink = xml_text.feed.link
+            except: feedlink = friend["link"]
             entries = xml_text.entries
             rule = xml_text.version
             l = len(entries) if len(entries) < 5 else 5
@@ -61,7 +62,8 @@ class FriendpageLinkSpider(scrapy.Spider):
                     except:
                         try: entrycreated_parsed = entry.updated_parsed
                         except: raise
-                entrycreated = "{:4d}-{:02d}-{:02d}".format(entrycreated_parsed[0], entrycreated_parsed[1], entrycreated_parsed[2])
+                try: entrycreated = "{:4d}-{:02d}-{:02d}".format(entrycreated_parsed[0], entrycreated_parsed[1], entrycreated_parsed[2])
+                except: raise
                 # 更新时间
                 try: entryupdated_parsed = entry.updated_parsed
                 except: 
@@ -69,8 +71,9 @@ class FriendpageLinkSpider(scrapy.Spider):
                     except: 
                         try: entryupdated_parsed = entry.created_parsed
                         except: raise
-                entryupdated = "{:4d}-{:02d}-{:02d}".format(entryupdated_parsed[0], entryupdated_parsed[1], entryupdated_parsed[2])
-                
+                try: entryupdated = "{:4d}-{:02d}-{:02d}".format(entryupdated_parsed[0], entryupdated_parsed[1], entryupdated_parsed[2])
+                except: raise
+
                 # 建立文章信息
                 post_info = {
                     'title': entrytitle,
