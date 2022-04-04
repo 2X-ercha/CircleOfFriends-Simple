@@ -53,7 +53,6 @@ class HexoCircleOfFriendsPipeline:
     def process_item(self, item, spider):
         self.nonerror_data.add(item["name"])
         self.friend_poor.append(item)
-        print("1", end=' ')
         return item
 
     def close_spider(self, spider):
@@ -69,10 +68,11 @@ class HexoCircleOfFriendsPipeline:
                         item["created"] = query_item.created
                         self.session.query(models.Post).filter_by(id=query_item.id).delete()
                         self.session.commit()
-                        print("[massage] 《{}》已更新".format(item['title']))
+                        print("[update] 《{}》已更新".format(item['title']))
                     else:
-                        print("[massage] 《{}》无变动".format(item['title']))
+                        print("[old] 《{}》无变动".format(item['title']))
                     break
+            else:
                 print("[new] 数据库新增《{}》".format(item['title']))
                 new_poor += 1
             self.friendpoor_push(item)
