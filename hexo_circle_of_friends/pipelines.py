@@ -7,11 +7,14 @@ from scrapy.exceptions import DropItem
 from hexo_circle_of_friends import settings,models
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,scoped_session
+from queue import Queue
+from threading import Thread
 
 
 class HexoCircleOfFriendsPipeline:
     def __init__(self):
         self.friend_info = []
+        self.friend_poor = []
         self.nonerror_data = set() # 未失联友链link集合
 
         self.total_post_num = 0
@@ -39,7 +42,7 @@ class HexoCircleOfFriendsPipeline:
             raise Exception("sqlite连接失败")
         Session = sessionmaker(bind=self.engine)
         self.session = scoped_session(Session)
-         # 创建表
+        # 创建表
         models.Model.metadata.create_all(self.engine)
         # 删除friend表
         self.session.query(models.Friend).delete()
@@ -49,24 +52,38 @@ class HexoCircleOfFriendsPipeline:
 
     def process_item(self, item, spider):
         self.nonerror_data.add(item["name"])
-        # rss创建时间保留
-        for query_item in self.query_post_list:
-            if query_item.link == item["link"]:
-                item["created"] = min(item['created'], query_item.created)
-                self.session.query(models.Post).filter_by(id=query_item.id).delete()
-                self.session.commit()
-                break
-        self.friendpoor_push(item)
+        self.friend_poor.append(item)
+        print("1", end=' ')
         return item
 
     def close_spider(self, spider):
+        print("----------------------")
         self.friendlist_push()
-        ## self.outdate_clean(settings.OUTDATE_CLEAN)
+        print("----------------------")
+        new_poor = 0
+        for item in self.friend_poor:
+            # rss创建时间保留
+            for query_item in self.query_post_list:
+                if query_item.link == item["link"]:
+                    if item["created"] > query_item.created:
+                        item["created"] = query_item.created
+                        self.session.query(models.Post).filter_by(id=query_item.id).delete()
+                        self.session.commit()
+                        print("[massage] 《{}》已更新".format(item['title']))
+                    else:
+                        print("[massage] 《{}》无变动".format(item['title']))
+                    break
+                print("[new] 数据库新增《{}》".format(item['title']))
+                new_poor += 1
+            self.friendpoor_push(item)
+
+        self.outdate_clean(settings.OUTDATE_CLEAN)
 
         print("----------------------")
         print("友链总数 : %d" % self.total_friend_num)
         print("失联友链数 : %d" % self.err_friend_num)
-        print("共 %d 篇文章" % self.total_post_num)
+        print("新增文章数 : %d" % new_poor)
+        print("本次爬取共获取 %d 篇文章" % self.total_post_num)
         self.session.close()
         print("done!")
 
