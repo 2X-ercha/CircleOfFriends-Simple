@@ -2,16 +2,11 @@
 
 import datetime
 import re
-from turtle import update
-from pytest import Session
 import yaml
 from scrapy.exceptions import DropItem
 from hexo_circle_of_friends import settings,models
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,scoped_session
-from sqlalchemy.sql.expression import desc
-from queue import Queue
-from threading import Thread
 
 
 class HexoCircleOfFriendsPipeline:
