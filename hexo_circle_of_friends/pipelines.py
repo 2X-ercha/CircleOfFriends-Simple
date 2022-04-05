@@ -85,7 +85,7 @@ class HexoCircleOfFriendsPipeline:
                 new_poor += 1
             self.friendpoor_push(item)
         '''
-
+        self.query_post()
         self.outdate_clean(settings.OUTDATE_CLEAN)
 
         print("----------------------")
@@ -107,6 +107,7 @@ class HexoCircleOfFriendsPipeline:
     # 超时清洗
     def outdate_clean(self,time_limit):
         out_date_post = 0
+        l, i = len(self.query_post_list), 0
         for query_i in self.query_post_list:
             updated = query_i.updated
             query_time = datetime.datetime.strptime(updated, "%Y-%m-%d")
@@ -114,6 +115,8 @@ class HexoCircleOfFriendsPipeline:
                 self.session.query(models.Post).filter_by(id=query_i.id).delete()
                 out_date_post += 1
                 self.session.commit()
+            print("文章过期清洗进度：{:.3f}%".format( i/l*100 ), end = "\r")
+        print("文章过期清洗完成")
 
     # 友链数据上传
     def friendlist_push(self):
@@ -164,6 +167,7 @@ class HexoCircleOfFriendsPipeline:
             'avatar': None,
             'rule': None
         }
+        l, i = len(postlist), 0
         for item in postlist:
             if item.link == post_info_now["link"]:
                 post_info_now["created"] = min(item.created, post_info_now["created"])
@@ -172,7 +176,8 @@ class HexoCircleOfFriendsPipeline:
                 self.session.commit()
             else:
                 ## 上一条文章上传
-                self.friendpoor_push(post_info_now)
+                if post_info_now["link"] != None:
+                    self.friendpoor_push(post_info_now)
                 ## 新文章初始化
                 post_info_now["name"] = item.author
                 post_info_now["avatar"] = item.avatar
@@ -183,6 +188,8 @@ class HexoCircleOfFriendsPipeline:
                 post_info_now["updated"] = item.updated
                 self.session.query(models.Post).filter_by(id=item.id).delete()
                 self.session.commit()
+            i += 1
+            print("文章数据整理进度：{:.3f}%".format( i/l*100 ), end = "\r")
         ## 循环结束后最后一条数据上传
         self.friendpoor_push(post_info_now)
         print("文章数据整理完成")
