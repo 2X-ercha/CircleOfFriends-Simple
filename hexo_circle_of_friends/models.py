@@ -18,11 +18,11 @@ class Friend(Model):
 
 class Post(Model):
     __tablename__ = 'posts'
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    ## id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String(256))
     created = Column(String(256))
     updated = Column(String(256))
-    link = Column(String(1024))
+    link = Column(String(1024), primary_key=True)
     author = Column(String(256))
     avatar = Column(String(1024))
     rule = Column(String(256))

@@ -63,7 +63,7 @@ HTTP_PROXY = False
 HTTP_PROXY_URL = ""
 
 # 过期文章清除（天）
-OUTDATE_CLEAN = 60
+OUTDATE_CLEAN = 180
 
 # retry allowed
 # 爬取url失败是否重试
