@@ -33,12 +33,17 @@ jobs:
       run: |
         pip install -r requirements.txt
     
+    - name: websave spider
+      env:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        python -u ./hexo_circle_of_friends/websave_spider.py $github-token
+
     - name: sqlite Update posts # sqlite
       env:
         SQLITE_DB: ${{ secrets.SQLITE_DB }}
-        github-token: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        python ./hexo_circle_of_friends/run.py $github-token
+        python -u ./hexo_circle_of_friends/run.py
 
     - name: Push sqlite data # sqlite push
       uses: github-actions-x/commit@v2.8

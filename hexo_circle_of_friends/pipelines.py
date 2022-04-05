@@ -69,8 +69,8 @@ class HexoCircleOfFriendsPipeline:
                         self.session.query(models.Post).filter_by(id=query_item.id).delete()
                         self.session.commit()
                         print("[update] 《{}》已更新".format(item['title']))
-                    else:
-                        print("[old] 《{}》无变动".format(item['title']))
+                    ## else:
+                        ## print("[old] 《{}》无变动".format(item['title']))
                     break
             else:
                 print("[new] 数据库新增《{}》".format(item['title']))
