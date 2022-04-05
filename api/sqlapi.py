@@ -32,8 +32,7 @@ def query_all(list, start: int = 0, end: int = -1, rule: str = "updated"):
         return {"message": "start error"}
     if end <= 0 or end <= start:
         return {"message": "end error"}
-    if rule != "created" and rule != "updated":
-        return {"message": "rule error, please use 'created'/'updated'"}
+    
 
     posts = session.query(Post).order_by(desc(rule)).offset(start).limit(end - start).all()
     last_update_time = session.query(Post).limit(2000).all()

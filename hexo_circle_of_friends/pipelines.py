@@ -2,11 +2,13 @@
 
 import datetime
 import re
+from turtle import update
 import yaml
 from scrapy.exceptions import DropItem
 from hexo_circle_of_friends import settings,models
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,scoped_session
+from sqlalchemy.sql.expression import desc
 from queue import Queue
 from threading import Thread
 
@@ -49,16 +51,22 @@ class HexoCircleOfFriendsPipeline:
         # 获取post表数据
         self.query_post()
 
-
     def process_item(self, item, spider):
         self.nonerror_data.add(item["name"])
-        self.friend_poor.append(item)
-        return item
+        ## self.friend_poor.append(item)
+        ## return item
+        ## 先push后整理
+        self.friendpoor_push(item)
 
     def close_spider(self, spider):
         print("----------------------")
         self.friendlist_push()
         print("----------------------")
+        # 获取post表数据
+        self.query_post()
+        self.friendpoor_set()
+        print("----------------------")
+        '''
         new_poor = 0
         for item in self.friend_poor:
             # rss创建时间保留
@@ -76,13 +84,14 @@ class HexoCircleOfFriendsPipeline:
                 print("[new] 数据库新增《{}》".format(item['title']))
                 new_poor += 1
             self.friendpoor_push(item)
+        '''
 
         self.outdate_clean(settings.OUTDATE_CLEAN)
 
         print("----------------------")
         print("友链总数 : %d" % self.total_friend_num)
         print("失联友链数 : %d" % self.err_friend_num)
-        print("新增文章数 : %d" % new_poor)
+        ## print("新增文章数 : %d" % new_poor)
         print("本次爬取共获取 %d 篇文章" % self.total_post_num)
         self.session.close()
         print("done!")
@@ -142,6 +151,42 @@ class HexoCircleOfFriendsPipeline:
         ## print("----------------------")
         ## print("{}: 《{}》\n文章发布时间：{}\t\t采取的爬虫规则为：{}".format(item["name"], item["title"], item["updated"], item["rule"]))
         self.total_post_num +=1
+    
+    # 文章整理
+    def friendpoor_set(self):
+        postlist = self.session.query(models.Post).order_by(desc('link')).all()
+        post_info_now = {
+            'title': None,
+            'created': None,
+            'updated': None,
+            'link': None,
+            'name': None,
+            'avatar': None,
+            'rule': None
+        }
+        for item in postlist:
+            if item.link == post_info_now["link"]:
+                post_info_now["created"] = min(item.created, post_info_now["created"])
+                post_info_now["updated"] = max(item.updated, post_info_now["updated"])
+                self.session.query(models.Post).filter_by(id=item.id).delete()
+                self.session.commit()
+            else:
+                ## 上一条文章上传
+                self.friendpoor_push(post_info_now)
+                ## 新文章初始化
+                post_info_now["name"] = item.author
+                post_info_now["avatar"] = item.avatar
+                post_info_now["created"] = item.created
+                post_info_now["link"] = item.link
+                post_info_now["rule"] = item.rule
+                post_info_now["title"] = item.title
+                post_info_now["updated"] = item.updated
+                self.session.query(models.Post).filter_by(id=item.id).delete()
+                self.session.commit()
+        ## 循环结束后最后一条数据上传
+        self.friendpoor_push(post_info_now)
+        print("文章数据整理完成")
+
 
 class DuplicatesPipeline:
     def __init__(self):
