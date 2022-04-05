@@ -100,8 +100,8 @@ class HexoCircleOfFriendsPipeline:
                 out_date_post += 1
                 self.session.commit()
             i += 1
-            print("文章过期清洗进度：{:.3f}%".format( i/l*100 ), end = "\r")
-        print("文章过期清洗完成")
+            # print("文章过期清洗进度：{:.3f}%".format( i/l*100 ), end = "\r")
+        print("文章过期清洗完成，共清洗{}篇文章".format(out_date_post))
 
     # 友链数据上传
     def friendlist_push(self):
