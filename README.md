@@ -2,6 +2,8 @@
 
 这里是友链朋友圈公共收录库，目的是提供一个公共的友圈以及提供无需后端的友圈部署方案
 
+项目主仓库（即个人部署方案）地址：https://github.com/Rock-Candy-Tea/hexo-circle-of-friends
+
 ## api 列表
 
 api地址：https://circle-of-friends-simple.vercel.app/
