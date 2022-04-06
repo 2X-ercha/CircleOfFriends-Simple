@@ -18,6 +18,9 @@ class HexoCircleOfFriendsPipeline:
         self.total_post_num = 0
         self.total_friend_num = 0
         self.err_friend_num = 0
+        self.new_post_num = 0
+        self.old_post_num = 0
+        self.update_post_num = 0
 
         # 友链去重
         self.friend_set = set()
@@ -55,11 +58,14 @@ class HexoCircleOfFriendsPipeline:
                 post.title = item["title"]
                 post.updated = item["updated"]
                 self.session.commit()
-            self.total_post_num += 1
+                self.update_post_num += 1
                 ## print("[updated] 《{}》已更新".format(item["title"]))
-            ## else:
+            else:
+                self.old_post_num += 1
                 ## print("[old] 《{}》无变动".format(item["title"]))
+            self.total_post_num += 1
         else:
+            self.new_post_num += 1
             ## print("[new] 新增文章《{}》".format(item["title"]))
             self.friendpoor_push(item)
 
@@ -75,7 +81,8 @@ class HexoCircleOfFriendsPipeline:
         print("----------------------")
         print("友链总数 : %d" % self.total_friend_num)
         print("失联友链数 : %d" % self.err_friend_num)
-        ## print("新增文章数 : %d" % new_poor)
+        print("新增文章数 : %d" % self.new_post_num)
+        print("更新文章数 : %d" % self.update_post_num)
         print("本次爬取共获取 %d 篇文章" % self.total_post_num)
         self.session.close()
         print("done!")
