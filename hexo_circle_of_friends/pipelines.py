@@ -103,11 +103,11 @@ class HexoCircleOfFriendsPipeline:
             updated = query_i.updated
             query_time = datetime.datetime.strptime(updated, "%Y-%m-%d")
             if (datetime.datetime.today() - query_time).days > time_limit:
-                self.session.query(models.Post).filter_by(link=query_i.link).delete()
+                self.session.delete(self.session.query(models.Post).get(query_i.link))
                 out_date_post += 1
-                self.session.commit()
             i += 1
             # print("文章过期清洗进度：{:.3f}%".format( i/l*100 ), end = "\r")
+        self.session.commit()
         print("文章过期清洗完成，共清洗{}篇文章".format(out_date_post))
 
     # 友链数据上传
