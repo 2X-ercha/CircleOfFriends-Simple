@@ -168,5 +168,6 @@
 
 - name: Mufanc
   link: https://blog.mufanc.xyz
+  feed: https://blog.mufanc.xyz/atom.xml
   avatar: https://blog.mufanc.xyz/assets/images/avatar.jpeg
   descr: 永不落幕の前奏詩
