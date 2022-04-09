@@ -5,3 +5,4 @@ requests
 SQLAlchemy==1.4.31
 aiohttp==3.8.1
 Werkzeug==1.0.1
+feedparser==6.0.8
