@@ -1,27 +1,8 @@
 # -*- coding:utf-8 -*-
-import uvicorn
 import requests
 import feedparser
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
-app = FastAPI()
-
-origins = [
-    "*"
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.get("/testfeed", tags=["API"], summary="验证feed格式是否能被友圈顺利解析及其建议")
-async def testfeed(feedlink: str):
+def testfeed(feedlink):
     retjson = {
         "error": False,
         "rule": None,
@@ -73,6 +54,3 @@ async def testfeed(feedlink: str):
         retjson["error"] = True
     retjson["error"] = t1 & t2
     return retjson
-
-if __name__ == "__main__":
-    uvicorn.run("testfeed:app", host="127.0.0.1")

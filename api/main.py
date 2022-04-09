@@ -8,6 +8,7 @@ sys.path.append(BASE_DIR)
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.sqlapi import *
+from api.testfeed import *
 
 app = FastAPI()
 
@@ -76,6 +77,14 @@ async def postjson(jsonlink: str, start: int = 0, end: int = -1, rule: str = "up
     '''
     list = ['title', 'created', 'updated', 'link', 'author', 'avatar']
     return query_post_json(jsonlink, list, start, end, rule)
+
+
+@app.get("/testfeed", tags=["API"], summary="验证feed格式是否能被友圈顺利解析及其建议")
+async def test(feedlink: str):
+    '''验证feed格式是否能被友圈顺利解析及其建议
+    - feedlink（必需）: feed链接地址
+    '''
+    return testfeed(feedlink)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1")
