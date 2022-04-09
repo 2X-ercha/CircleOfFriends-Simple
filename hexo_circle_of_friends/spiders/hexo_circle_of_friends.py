@@ -43,7 +43,7 @@ class FriendpageLinkSpider(scrapy.Spider):
         try:
             friend = response.meta.get("friend")
             xml_text = feedparser.parse(response.text)
-            try: feedlink = xml_text.feed.link
+            try: feedlink = xml_text.feed.generator_detail.href
             except: feedlink = friend["link"]
             entries = xml_text.entries
             rule = xml_text.version
