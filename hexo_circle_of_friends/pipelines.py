@@ -60,14 +60,14 @@ class HexoCircleOfFriendsPipeline:
                 post.updated = item["updated"]
                 self.session.commit()
                 self.update_post_num += 1
-                print("[updated] 《{}》已更新".format(item["title"]))
+                # print("[updated] 《{}》已更新".format(item["title"]))
             else:
                 self.old_post_num += 1
-                print("[old] 《{}》无变动".format(item["title"]))
+                # print("[old] 《{}》无变动".format(item["title"]))
             self.total_post_num += 1
         else:
             self.new_post_num += 1
-            print("[new] 新增文章《{}》".format(item["title"]))
+            # print("[new] 新增文章《{}》".format(item["title"]))
             self.friendpoor_push(item)
 
 
