@@ -33,6 +33,7 @@ class HexoCircleOfFriendsPipeline:
         self.friends = friends + From_saveweb
         for friend in self.friends:
             if friend["link"] not in self.friend_set:
+                self.friend_set.add(friend["link"])
                 self.friend_info.append(friend)
     
     def open_spider(self, spider):
