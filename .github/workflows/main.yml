@@ -48,5 +48,4 @@ jobs:
       with:
         files: |
           data.db
-        commit-message: Committing ./myfile
-        ref: refs/heads/my-branch
+        commit-message: update data.db
