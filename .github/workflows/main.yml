@@ -46,11 +46,11 @@ jobs:
         python -u ./hexo_circle_of_friends/run.py
 
     - name: Push sqlite data # sqlite push
-      uses: github-actions-x/commit@v2.8
+      uses: swinton/commit@v2.x
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: "Update data.db"
-        files: data.db
-        rebase: 'true'
-        name: ${{ env.GITHUB_NAME }}
-        email: ${{ env.GITHUB_EMAIL }}
+        files: |
+          data.db
+        commit-message: Committing ./myfile
+        ref: refs/heads/my-branch
